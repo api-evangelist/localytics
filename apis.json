@@ -1,0 +1,70 @@
+{
+    "name": "Localytics",
+    "description": "With our platform you get smarter analytics insights and mobile app marketing experiences that better engage your users. Check out a full list of features!",
+    "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/screen-capture-api\/9135-localytics.jpg",
+    "tags": [
+        "analysis",
+        "api provider",
+        "api service provider",
+        "have api"
+    ],
+    "created": "2019-12-19",
+    "modified": "2019-12-19",
+    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/localytics\/master\/apis.json",
+    "specificationVersion": "0.14",
+    "apis": [
+        {
+            "name": "Localytics",
+            "description": null,
+            "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/screen-capture-api\/9135-localytics.jpg",
+            "humanURL": "http:\/\/www.localytics.com\/",
+            "baseURL": "",
+            "tags": [],
+            "properties": [
+                {
+                    "type": "x-openapi",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/localytics-openapi.json"
+                }
+            ]
+        }
+    ],
+    "include": [],
+    "x-common": [
+        {
+            "type": "Blog",
+            "url": "http:\/\/www.localytics.com\/blog\/"
+        },
+        {
+            "type": "Blog RSS",
+            "url": "http:\/\/www.localytics.com\/feed\/rss\/"
+        },
+        {
+            "type": "Crunchbase",
+            "url": "https:\/\/crunchbase.com\/organization\/localytics"
+        },
+        {
+            "type": "Email",
+            "url": "contact@localytics.com"
+        },
+        {
+            "type": "Email",
+            "url": "support@localytics.com"
+        },
+        {
+            "type": "Email",
+            "url": "privacy@localytics.com"
+        },
+        {
+            "type": "Github",
+            "url": "https:\/\/github.com\/localytics"
+        },
+        {
+            "type": "Twitter",
+            "url": "https:\/\/twitter.com\/localytics"
+        },
+        {
+            "type": "Website",
+            "url": "http:\/\/www.localytics.com\/"
+        }
+    ]
+}
