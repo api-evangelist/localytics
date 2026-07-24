@@ -1,0 +1,783 @@
+openapi: 3.0.3
+info:
+  title: Localytics Campaigns And Audience Audiences Push Campaigns API
+  description: "Localytics is an enterprise-grade mobile intelligence platform for real-time analytics, personalized marketing, and customer lifecycle optimization.\n\n- Campaign Functionality - The platform supports comprehensive campaign creation and management through this API, enabling flexible configuration of goal, scheduling, and target audience.\n\n  * Enables full campaign scheduling with A/B testing via multiple creatives, control-group weights, and advanced scheduling and delivery controls.\n\n  * Upload creative assets (HTML/Javascript/CSS assets) via API for the supporting channels (In-App, Inbox)\n\n  * Associate creatives with campaigns using standard formatting options from dashboard.\n\n  * Supported channels:\n      Push Messaging\n"
+  version: 1.1.2
+servers:
+- url: https://dashboard.localytics.com/api/v6
+security:
+- BasicAuth: []
+tags:
+- name: Push Campaigns
+  description: Requests relating to push-channel campaigns
+paths:
+  /orgs/{org_id}/apps/{app_id}/push/campaigns:
+    post:
+      summary: 'Create a new push campaign with the given parameters. Note that campaigns with `active` status will be sent to end users upon the configured schedule with no further confirmation.
+
+        '
+      tags:
+      - Push Campaigns
+      operationId: CreatePushCampaign
+      parameters:
+      - name: org_id
+        description: The organization id found in your Dashboard containing your app.
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: app_id
+        description: The App Key which will receive this message, which can be found under the settings page of your Dashboard.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Provide the campaign details name, status, conversion attributes, goal, creative_attributes, audiences target_rules, schedule details etc
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushCampaignParams'
+      responses:
+        '201':
+          description: Successfully created the push campaign with given attribute values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignResponse'
+        '401':
+          description: Unauthorized
+        '422':
+          description: Invalid input parameters
+  /orgs/{org_id}/apps/{app_id}/push/campaigns/{campaign_id}:
+    get:
+      summary: Get the push campaign's audience, creatives, schedule details.
+      tags:
+      - Push Campaigns
+      operationId: GetPushCampaign
+      parameters:
+      - name: org_id
+        description: organization id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: app_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: campaign_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Successfully retrieved the campaign details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignResponse'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+    delete:
+      summary: Delete the push campaign.
+      tags:
+      - Push Campaigns
+      operationId: DeletePushCampaign
+      parameters:
+      - name: org_id
+        description: organization id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: app_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: campaign_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Successfully deleted the given push campaign.
+        '401':
+          description: Unauthorized
+        '403':
+          description: Campaign cannot be deleted. It may be active or have jobs running.
+        '404':
+          description: Not found
+    put:
+      summary: 'Edit a existing campaign with the given parameters. Note that campaigns with `active` status will be sent to end users upon the configured schedule with no further confirmation.
+
+        '
+      tags:
+      - Push Campaigns
+      operationId: editPushCampaign
+      parameters:
+      - name: org_id
+        description: The organization id found in your Dashboard containing your app.
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: app_id
+        description: The App Key which will receive this message, which can be found under the settings page of your Dashboard.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: campaign_id
+        in: path
+        required: true
+        description: Campaign id
+        schema:
+          type: integer
+      requestBody:
+        description: Provide the campaign details name, status, conversion attributes, goal, creative_attributes, audiences target_rules, schedule details etc.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushCampaignParams'
+      responses:
+        '200':
+          description: Successfully edited the campaign with the updated values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignResponse'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Campaign not found.
+        '422':
+          description: Invalid input parameters
+  /orgs/{org_id}/apps/{app_id}/push/campaigns/{campaign_id}/archive:
+    put:
+      summary: Archive the push campaign.
+      tags:
+      - Push Campaigns
+      operationId: ArchivePushCampaign
+      parameters:
+      - name: org_id
+        description: organization id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: app_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: campaign_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Successfully archived the given campaign.
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+components:
+  schemas:
+    CreativesAttributes:
+      allOf:
+      - type: object
+      - properties:
+          title:
+            type: string
+          percent:
+            type: integer
+          key_values:
+            type: array
+            items:
+              type: object
+              properties:
+                key:
+                  type: string
+                value:
+                  type: string
+      - $ref: '#/components/schemas/BuildAttributes'
+    CampaignParams:
+      type: object
+      required:
+      - name
+      - status
+      - goal
+      - audiences
+      - schedule
+      - creatives
+      properties:
+        name:
+          type: string
+          description: Give any campaign name.
+        status:
+          type: string
+          enum:
+          - active
+          - draft
+        goal:
+          type: string
+          enum:
+          - activate
+          - drive_behavior
+          - nurture
+          - monetize
+          - reengage
+          - notify
+        conversion_event:
+          type: object
+          description: Optional object for campaign performance tracking based upon whether receiving users later trigger this event. If undefined, then this campaign will disable conversion tracking.
+          properties:
+            event_name:
+              type: string
+              description: event_name which should be in event list.
+            conversion_attributes:
+              type: object
+              properties:
+                filters:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      dimension_name:
+                        type: string
+                        example: App Version
+                      operator:
+                        type: string
+                        enum:
+                        - is_one_of
+                        - is_none_of
+                      value:
+                        oneOf:
+                        - type: string
+                        - type: integer
+                        - type: array
+                          items:
+                            type: string
+                operator:
+                  type: string
+                  enum:
+                  - and
+                  - or
+              required:
+              - filters
+              - operator
+        audiences:
+          type: object
+          properties:
+            campaign_type:
+              type: string
+              enum:
+              - everyone
+              - saved_audience
+              - new_audience
+            control_group_percent:
+              type: integer
+              example: 5
+            target_rules:
+              description: Required if campaign_type = new_audience or saved_audience. Must match TargetRulesNewAudience or TargetRulesAudienceExisting.
+              oneOf:
+              - $ref: '#/components/schemas/TargetRulesNewAudience'
+              - $ref: '#/components/schemas/TargetRulesAudienceExisting'
+          oneOf:
+          - required:
+            - campaign_type
+            properties:
+              campaign_type:
+                type: string
+                enum:
+                - everyone
+          - required:
+            - campaign_type
+            - target_rules
+            properties:
+              campaign_type:
+                type: string
+                enum:
+                - new_audience
+              target_rules:
+                $ref: '#/components/schemas/TargetRulesNewAudience'
+          - required:
+            - campaign_type
+            - target_rules
+            properties:
+              campaign_type:
+                type: string
+                enum:
+                - saved_audience
+              target_rules:
+                $ref: '#/components/schemas/TargetRulesAudienceExisting'
+          required:
+          - campaign_type
+    Schedule:
+      type: object
+      anyOf:
+      - required:
+        - begin_immediately
+      - required:
+        - on_schedule
+      - required:
+        - recurring
+      - required:
+        - optimized
+      properties:
+        begin_immediately:
+          $ref: '#/components/schemas/BeginImmediately'
+        on_schedule:
+          $ref: '#/components/schemas/OnSchedule'
+        recurring:
+          $ref: '#/components/schemas/Recurring'
+        optimized:
+          $ref: '#/components/schemas/Optimized'
+    Optimized:
+      type: object
+      properties:
+        fallback_time:
+          type: string
+          format: date
+          example: '2025-08-26T04:30:00.000Z'
+          description: Date in UTC format
+      required:
+      - fallback_time
+    FrequencyCappingAttributes:
+      type: array
+      items:
+        properties:
+          name:
+            type: string
+            enum:
+            - messages_per_days
+            - total_message_ever
+          days:
+            type: integer
+            description: Required only when name = messages_per_days
+          count:
+            type: integer
+          messages_atleast_days_apart:
+            type: integer
+            description: Required only when name = messages_per_days
+        required:
+        - name
+        - count
+    DateOperators:
+      type: string
+      enum:
+      - is on or before
+      - is on or after
+      - is exactly
+      - is not
+      - is between
+      - is defined
+      - is not defined
+    TargetRulesNewAudience:
+      $ref: '#/components/schemas/AudienceDefinition'
+    BuildAttributes:
+      type: object
+      properties:
+        build_attributes:
+          type: object
+          properties:
+            push_message:
+              type: string
+            push_title:
+              type: string
+            push_subtitle:
+              type: string
+            attachment_url:
+              type: string
+              example: https://sample.com/p/rp/859d34a70914df30.png
+              description: Rich media displayed in the push message. Required if ll_mi_deep_link_url is defined.
+            push_category:
+              type: string
+              example: like_dislike
+            ll_mi_deep_link_url:
+              type: string
+              example: https://sample.com/p/rp/859d34a70914df30.png
+              description: 'This should be a URL generated from a Movable Ink partner snippet, otherwise see `ll_deep_link_url`.
+
+                '
+            ll_deep_link_url:
+              type: string
+              description: The deep link URL to open when the user clicks the message. Web URLs and custom app URL schemes are supported.
+              example: yourappname://product/12345?color=red&size=large
+            sound:
+              type: string
+              description: Allowed for only ios platform.
+          anyOf:
+          - required:
+            - push_message
+          - required:
+            - push_title
+          - required:
+            - attachment_url
+    Intervals:
+      type: array
+      items:
+        type: object
+        properties:
+          interval:
+            type: string
+            enum:
+            - weekly
+            - monthly
+            - every hour
+            - every day
+            - every other day
+          day_of_week:
+            type: string
+            example: sunday
+            description: Required when interval is weekly.
+          on_day:
+            type: integer
+            description: Required when interval is monthly.
+    DimensionStringOperators:
+      type: string
+      enum:
+      - is one of
+      - is none of
+    AudienceDefinition:
+      type: object
+      required:
+      - targeting_type
+      anyOf:
+      - required:
+        - behavior
+      - required:
+        - profile
+      properties:
+        behavior_profile_operator:
+          type: string
+          enum:
+          - or
+          - and
+          description: Required if both behavior and profile are defined.
+        targeting_type:
+          type: string
+          enum:
+          - install_id
+          - customer_id
+          description: install_id will send to users across all of their devices, for example, their phone and tablet. customer_id will target only users on their latest device.
+        behavior:
+          type: object
+          properties:
+            days:
+              type: integer
+              example: 30
+              minimum: 1
+              description: Number of days to include in the query (e.g., last N days)
+            behavior_rule_operator:
+              type: string
+              enum:
+              - and
+              - or
+              - and_then
+              description: and_then only allowed for 2 rules, the first of which must be event, and the second of which can be event or not-event.
+            rules:
+              type: array
+              items:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 1
+                  count_operator:
+                    type: string
+                    enum:
+                    - less_than
+                    - exactly
+                    - atleast
+                  event_name:
+                    type: string
+                    description: event_name which should be in event list.
+                  rule_type:
+                    type: string
+                    enum:
+                    - not-event
+                    - event
+                    - not-session
+                    - session
+                  conditions:
+                    type: object
+                    properties:
+                      filters:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            dimension_name:
+                              type: string
+                              example: App Version
+                            operator:
+                              type: string
+                              oneOf:
+                              - $ref: '#/components/schemas/DimensionStringOperators'
+                              - $ref: '#/components/schemas/DimensionNumberOperators'
+                              - $ref: '#/components/schemas/DimensionVersionOperators'
+                            value:
+                              oneOf:
+                              - type: string
+                              - type: integer
+                              - type: array
+                                items:
+                                  type: string
+                      operator:
+                        type: string
+                        enum:
+                        - or
+                        - and
+                  neg_time_window:
+                    type: array
+                    items:
+                      type: integer
+                    example:
+                    - 0
+                    - 15
+                required:
+                - count
+                - count_operator
+                - conditions
+          required:
+          - days
+          - behavior_rule_operator
+          - rules
+        profile:
+          $ref: '#/components/schemas/ProfileDefinition'
+    Recurring:
+      allOf:
+      - $ref: '#/components/schemas/RecurringParams'
+      - type: object
+        properties:
+          intervals:
+            $ref: '#/components/schemas/Intervals'
+    CampaignResponse:
+      allOf:
+      - type: object
+      - properties:
+          id:
+            type: integer
+      - $ref: '#/components/schemas/CampaignParams'
+      - type: object
+        properties:
+          schedule:
+            $ref: '#/components/schemas/ScheduleResponse'
+          creatives:
+            $ref: '#/components/schemas/CreativesAttributesResponse'
+    CreativesAttributesResponse:
+      allOf:
+      - type: object
+      - properties:
+          id:
+            type: integer
+          letter:
+            type: string
+            example: A
+      - $ref: '#/components/schemas/CreativesAttributes'
+    IntervalsResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          interval:
+            type: string
+            enum:
+            - weekly
+            - monthly
+            - every hour
+            - every day
+            - every other day
+          interval_start:
+            type: string
+            format: date
+            example: '2025-08-26T04:30:00.000Z'
+            description: Date in UTC format
+          day_of_week:
+            type: string
+            example: sunday
+          on_day:
+            type: integer
+    ScheduleResponse:
+      type: object
+      anyOf:
+      - required:
+        - begin_immediately
+      - required:
+        - on_schedule
+      - required:
+        - recurring
+      - required:
+        - optimized
+      properties:
+        begin_immediately:
+          $ref: '#/components/schemas/BeginImmediately'
+        on_schedule:
+          $ref: '#/components/schemas/OnSchedule'
+        recurring:
+          $ref: '#/components/schemas/RecurringResponse'
+        optimized:
+          $ref: '#/components/schemas/Optimized'
+    StringOperators:
+      type: string
+      enum:
+      - is defined
+      - is not defined
+      - is one of
+      - is none of
+    RecurringParams:
+      type: object
+      properties:
+        begin_date:
+          type: string
+          format: date
+          example: '2025-08-26T04:30:00.000Z'
+          description: Date in UTC format
+        end_date:
+          type: string
+          format: date
+          example: '2025-08-26T04:30:00.000Z'
+          description: Date in UTC format
+        starting_time_zone_id:
+          type: integer
+        push_throttle_num_msgs:
+          type: integer
+          description: push_throttle_num_msgs cannot be defined if starting_time_zone_id is given.
+        frequency_attributes:
+          $ref: '#/components/schemas/FrequencyCappingAttributes'
+      required:
+      - begin_date
+      - intervals
+    PushCampaignParams:
+      allOf:
+      - $ref: '#/components/schemas/CampaignParams'
+      - type: object
+        properties:
+          schedule:
+            $ref: '#/components/schemas/Schedule'
+          creatives:
+            $ref: '#/components/schemas/CreativesAttributes'
+    DimensionVersionOperators:
+      type: string
+      enum:
+      - is one of
+      - is none of
+      - greater than
+      - less than
+    BeginImmediately:
+      type: object
+      properties:
+        push_throttle_num_msgs:
+          type: integer
+    TargetRulesAudienceExisting:
+      type: object
+      properties:
+        audience:
+          type: array
+          items:
+            type: integer
+    RecurringResponse:
+      allOf:
+      - $ref: '#/components/schemas/RecurringParams'
+      - type: object
+        properties:
+          intervals:
+            $ref: '#/components/schemas/IntervalsResponse'
+    OnSchedule:
+      type: object
+      properties:
+        begin_date:
+          type: string
+          format: date
+          example: '2025-08-26T04:30:00.000Z'
+          description: Date in UTC format
+        starting_time_zone_id:
+          type: integer
+        push_throttle_num_msgs:
+          type: integer
+          description: push_throttle_num_msgs cannot be defined if starting_time_zone_id is given.
+      required:
+      - begin_date
+    DimensionNumberOperators:
+      type: string
+      enum:
+      - is one of
+      - is none of
+      - greater than
+      - at least
+      - less than
+      - no more than
+      - equal to
+      - between
+    ProfileDefinition:
+      type: object
+      required:
+      - criteria
+      - operator
+      properties:
+        criteria:
+          type: array
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+              scope:
+                type: string
+                enum:
+                - app
+                - org
+                description: App - Profile attribute specific to the selected app Org - A global profile attribute common to all your apps
+              date_type:
+                type: string
+                enum:
+                - date
+                - days ago
+                - days from now
+                description: Required when the key is date type.
+              operator:
+                type: string
+                oneOf:
+                - $ref: '#/components/schemas/StringOperators'
+                - $ref: '#/components/schemas/NumberOperators'
+                - $ref: '#/components/schemas/DateOperators'
+              values:
+                type: array
+                items:
+                  type: string
+                description: values are not required for is_defined and is_not_defined operator.
+            required:
+            - key
+            - scope
+            - operator
+            - values
+        operator:
+          type: string
+          enum:
+          - and
+          - or
+    NumberOperators:
+      type: string
+      enum:
+      - is one of
+      - is none of
+      - <
+      - <=
+      - '>'
+      - '>='
+      - is between
+      - is defined
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

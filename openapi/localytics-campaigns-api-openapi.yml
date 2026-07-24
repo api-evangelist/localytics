@@ -1,0 +1,287 @@
+openapi: 3.0.3
+info:
+  title: Localytics And Audience Audiences Campaigns API
+  description: "Localytics is an enterprise-grade mobile intelligence platform for real-time analytics, personalized marketing, and customer lifecycle optimization.\n\n- Campaign Functionality - The platform supports comprehensive campaign creation and management through this API, enabling flexible configuration of goal, scheduling, and target audience.\n\n  * Enables full campaign scheduling with A/B testing via multiple creatives, control-group weights, and advanced scheduling and delivery controls.\n\n  * Upload creative assets (HTML/Javascript/CSS assets) via API for the supporting channels (In-App, Inbox)\n\n  * Associate creatives with campaigns using standard formatting options from dashboard.\n\n  * Supported channels:\n      Push Messaging\n"
+  version: 1.1.2
+servers:
+- url: https://dashboard.localytics.com/api/v6
+security:
+- BasicAuth: []
+tags:
+- name: Campaigns
+  description: Requests relating to all channel campaigns
+paths:
+  /orgs/{org_id}/apps/{app_id}/campaigns:
+    get:
+      summary: Fetch campaigns (with filters/sort)
+      description: Returns a list of campaigns filtered by the given query parameters
+      tags:
+      - Campaigns
+      operationId: ListCampaigns
+      parameters:
+      - name: org_id
+        in: path
+        required: true
+        description: The organization id found in your Dashboard containing your app.
+        schema:
+          type: integer
+      - name: app_id
+        in: path
+        required: true
+        description: app id value
+        schema:
+          type: string
+      - name: channel
+        in: query
+        required: false
+        description: Comma-separated values if multiple channels. Optional filter parameter.
+        schema:
+          type: string
+          enum:
+          - push
+          - in-app
+          - inbox
+          - places
+      - name: status
+        in: query
+        required: false
+        description: Comma-separated values if multiple campaign statuses
+        schema:
+          type: string
+          enum:
+          - scheduled
+          - draft
+          - active
+          - inactive
+          - expired
+          - sent
+          - test
+      - name: sort_by
+        in: query
+        required: false
+        description: Column to sort by
+        schema:
+          type: string
+          enum:
+          - created_at
+          - name
+      - name: sort_order
+        in: query
+        required: false
+        description: Order of sorting
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: per_page
+        in: query
+        required: false
+        description: Number of records per API call (100 by default)
+        schema:
+          type: integer
+      - name: recurring
+        in: query
+        required: false
+        description: '0: none and both, 1: recurring, 2: only one-time, 3: either recurring OR one-time'
+        schema:
+          type: integer
+          enum:
+          - 0
+          - 1
+          - 2
+          - 3
+      - name: is_archived
+        in: query
+        required: false
+        description: '0: unarchived, 1: archived'
+        schema:
+          type: integer
+          enum:
+          - 0
+          - 1
+      - name: page_number
+        in: query
+        schema:
+          type: integer
+        description: Page number for pagination
+      responses:
+        '200':
+          description: Successful response on listing all campaigns based on filters if any.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCampaignResponse'
+        '404':
+          description: Not Found – Resource not found
+        '422':
+          description: Invalid input parameters
+        '500':
+          description: Internal Server Error
+  /orgs/{org_id}/apps/{app_id}/campaigns/search:
+    get:
+      summary: Search campaigns by keyword
+      description: Fetches campaigns by name or ID using a required key param
+      tags:
+      - Campaigns
+      operationId: SearchCampaigns
+      parameters:
+      - name: org_id
+        in: path
+        required: true
+        description: The organization id found in your Dashboard containing your app.
+        schema:
+          type: integer
+      - name: app_id
+        in: path
+        required: true
+        description: app id value
+        schema:
+          type: string
+      - name: key
+        in: query
+        required: true
+        description: Key to search by name or campaign ID
+        schema:
+          type: string
+      - name: channel
+        in: query
+        required: false
+        description: Comma-separated values if multiple channels. Optional filter parameter.
+        schema:
+          type: string
+          enum:
+          - push
+          - in-app
+          - inbox
+          - places
+      - name: status
+        in: query
+        required: false
+        description: Comma-separated values if multiple campaign statuses
+        schema:
+          type: string
+          enum:
+          - scheduled
+          - draft
+          - active
+          - inactive
+          - expired
+          - sent
+          - test
+          - error
+      - name: sort_by
+        in: query
+        required: false
+        description: Column to sort by
+        schema:
+          type: string
+          enum:
+          - created_at
+          - name
+      - name: sort_order
+        in: query
+        required: false
+        description: Order of sorting
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: per_page
+        in: query
+        required: false
+        description: Number of records per API call (100 by default)
+        schema:
+          type: integer
+      - name: recurring
+        in: query
+        required: false
+        description: '0: none and both, 1: recurring, 2: only one-time, 3: either recurring OR one-time'
+        schema:
+          type: integer
+          enum:
+          - 0
+          - 1
+          - 2
+          - 3
+      - name: is_archived
+        in: query
+        required: false
+        description: '0: unarchived, 1: archived'
+        schema:
+          type: integer
+          enum:
+          - 0
+          - 1
+      - name: page_number
+        in: query
+        schema:
+          type: integer
+        description: Page number for pagination
+      responses:
+        '200':
+          description: Successful response on listing all campaigns based on filters if any and search key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCampaignResponse'
+        '404':
+          description: Not Found – Resource not found
+        '422':
+          description: Invalid input parameters
+        '500':
+          description: Internal Server Error
+components:
+  schemas:
+    ListCampaignResponse:
+      type: object
+      properties:
+        app_id:
+          type: string
+        records_count:
+          type: integer
+        total_records:
+          type: integer
+        campaigns:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              message_type:
+                type: string
+              platform:
+                type: string
+              send_local_tz:
+                type: integer
+              recurring:
+                type: integer
+              begin_date:
+                type: string
+                format: date-time
+                nullable: true
+              end_date:
+                type: string
+                format: date-time
+                nullable: true
+              status:
+                type: string
+              created_at:
+                type: string
+                format: date-time
+              updated_at:
+                type: string
+                format: date-time
+              sends:
+                type: integer
+              open_rate:
+                type: string
+                example: 10.4%
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
