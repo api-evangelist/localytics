@@ -1,0 +1,12 @@
+generated: '2026-07-20'
+method: generated
+source: openapi/localytics-campaigns-audiences-openapi.yml
+skills:
+  - file: localytics-create-push-campaign.md
+    name: Create and manage a Localytics push campaign
+    api: openapi/localytics-campaigns-audiences-openapi.yml
+    operations: [CreatePushCampaign, GetPushCampaign, editPushCampaign, ArchivePushCampaign, DeletePushCampaign]
+  - file: localytics-build-audience.md
+    name: Build a Localytics audience and size it
+    api: openapi/localytics-campaigns-audiences-openapi.yml
+    operations: [createAudiences, ListAudiences, AudienceSegmentation, GetAudienceSegmentationCount, editAudiences, DeleteAudience]

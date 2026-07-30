@@ -1,0 +1,24 @@
+generated: '2026-07-20'
+method: searched
+source: https://docs.localytics.com/dev/
+note: >-
+  Lifecycle posture assembled from the Localytics developer documentation and the harvested
+  OpenAPI. Multiple independently versioned API surfaces are in production.
+versioning:
+  scheme: uri-path
+  surfaces:
+    - { api: Query / Reporting, base: https://api.localytics.com/v1, current: v1 }
+    - { api: Push, base: https://messaging.localytics.com/v2, current: v2 }
+    - { api: Campaigns & Audience, base: https://dashboard.localytics.com/api/v6, current: v6 }
+maturity:
+  campaigns_audiences_api: BETA (OpenAPI info.version 1.1.2)
+deprecation:
+  policy_url: null
+  sunset_header: false
+  note: No formal deprecation policy or RFC 8594 Sunset/Deprecation header support found in docs.
+sla:
+  url: null
+  note: No public SLA/uptime commitment found.
+status_page: null
+status_page_note: No public status page (status.localytics.com) found during probe.
+deprecated_operations: []

@@ -1,0 +1,18 @@
+{
+  "provider": "localytics",
+  "sources": [
+    "localytics-audiences-api-openapi.yml",
+    "localytics-campaigns-api-openapi.yml",
+    "localytics-push-campaigns-api-openapi.yml"
+  ],
+  "outputs": [
+    "localytics-audiences-api-openapi.yml",
+    "localytics-campaigns-api-openapi.yml",
+    "localytics-push-campaigns-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

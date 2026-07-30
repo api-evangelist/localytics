@@ -1,0 +1,15 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Localytics Campaigns And Audience API
+  version: 1.0.0
+extends: openapi/localytics-campaigns-audiences-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-enriched: '2026-07-20'
+    x-apievangelist-auth: HTTP Basic (org-level API key/secret)
+    x-apievangelist-idempotency: Push API request_id GUID de-duplicates within 24h
+- target: $.servers
+  update:
+  - url: https://dashboard.localytics.com/api/v6
+    description: Campaigns And Audience API (production)

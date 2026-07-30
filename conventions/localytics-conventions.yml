@@ -1,0 +1,54 @@
+generated: '2026-07-20'
+method: searched
+source: https://docs.localytics.com/dev/
+note: >-
+  Cross-cutting request/response semantics for the Localytics REST APIs, captured from the
+  developer documentation (Query, Push, Campaigns & Audience APIs) and derived from the
+  harvested OpenAPI.
+authentication:
+  style: HTTP Basic (RFC 7617)
+  detail: >-
+    API key passed as the HTTP Basic username, API secret as the HTTP Basic password.
+    Query API also accepts api_key/api_secret as query parameters (override Basic). Organization-level
+    credentials are recommended over user-level.
+  docs: https://docs.localytics.com/dev/query-api.html
+idempotency:
+  supported: true
+  mechanism: request_id
+  location: request body field
+  scope: Push API (POST https://messaging.localytics.com/v2/push/<app_id>)
+  retention: 24 hours
+  detail: >-
+    An optional request_id GUID de-duplicates repeated push requests within a 24-hour window,
+    preventing duplicate message delivery on retry.
+  docs: https://docs.localytics.com/dev/push-api.html
+pagination:
+  supported: partial
+  detail: >-
+    List endpoints (Campaigns list/search) accept filter, sort and keyword query parameters;
+    Query API supports limit and order parameters. No cursor/offset envelope is documented across
+    all resources.
+media_type:
+  detail: >-
+    The v1 Query/Reporting API returns HAL+JSON hypermedia; the root
+    (https://api.localytics.com/v1) responds with
+    application/vnd.localytics.v1+hal+json and _links templated hrefs.
+versioning:
+  scheme: uri-path
+  detail: >-
+    Multiple versioned surfaces coexist — reporting/query at /v1 (api.localytics.com), push at
+    /v2 (messaging.localytics.com), campaigns & audiences at /api/v6 (dashboard.localytics.com).
+error_envelope:
+  detail: >-
+    Errors are signaled by HTTP status (401/403/404/422/500). Responses return a JSON error body;
+    no application/problem+json (RFC 9457) is declared.
+  ref: errors/localytics-problem-types.yml
+rate_limiting:
+  detail: >-
+    Documented per-API. 429 Too Many Requests when exceeded. See rate-limits artifact.
+  ref: rate-limits/localytics-rate-limits.yml
+cross_links:
+  authentication: authentication/localytics-authentication.yml
+  errors: errors/localytics-problem-types.yml
+  lifecycle: lifecycle/localytics-lifecycle.yml
+  rate_limits: rate-limits/localytics-rate-limits.yml

@@ -1,0 +1,32 @@
+generated: '2026-07-20'
+method: derived
+source: https://docs.localytics.com/docs/resources/developer-documentation
+note: >-
+  First-party SDKs listed in the Localytics developer documentation. Package-registry
+  coordinates (npm/Maven/CocoaPods/NuGet) were not resolved this pass; entries are derived
+  from the docs SDK index and are all first-party Localytics client libraries.
+packages:
+  - platform: android
+    name: Localytics Android SDK
+    official: true
+    docs: https://docs.localytics.com/dev/
+  - platform: ios
+    name: Localytics iOS SDK
+    official: true
+    docs: https://docs.localytics.com/dev/
+  - platform: tvos
+    name: Localytics Apple TV SDK
+    official: true
+    docs: https://docs.localytics.com/dev/
+  - platform: react-native
+    name: Localytics React Native SDK
+    official: true
+    docs: https://docs.localytics.com/dev/
+  - platform: web
+    name: Localytics Web SDK
+    official: true
+    docs: https://docs.localytics.com/dev/
+  - platform: windows
+    name: Localytics Windows SDK
+    official: true
+    docs: https://docs.localytics.com/dev/

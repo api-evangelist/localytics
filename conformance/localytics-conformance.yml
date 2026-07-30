@@ -1,0 +1,22 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/localytics-campaigns-audiences-openapi.yml
+standards:
+- id: openapi-3.0
+  conforms: true
+  evidence: Campaigns And Audience API published as OpenAPI 3.0.3
+- id: http-basic-auth
+  conforms: true
+  evidence: securitySchemes BasicAuth (RFC 7617); Query & Push APIs also use HTTP Basic
+- id: oauth2
+  conforms: false
+  evidence: no oauth2 securityScheme declared
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: error responses do not use application/problem+json
+- id: hal-hypermedia
+  conforms: true
+  evidence: api.localytics.com/v1 root returns application/vnd.localytics.v1+hal+json
+- id: rest
+  conforms: true
+  evidence: resource-oriented CRUD over orgs/apps/push/campaigns/audiences

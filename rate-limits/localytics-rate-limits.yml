@@ -1,0 +1,21 @@
+generated: '2026-07-20'
+method: searched
+source: https://docs.localytics.com/dev/
+note: >-
+  Rate limits published in the Localytics developer documentation. 429 Too Many Requests is
+  returned when a limit is exceeded.
+apis:
+  - api: Query / Reporting API
+    docs: https://docs.localytics.com/dev/query-api.html
+    limits:
+      - { scope: concurrency, limit_count: 1, window: simultaneous request }
+      - { scope: per-minute, limit_count: 60, window: 1 minute }
+      - { scope: per-hour, limit_count: 150, window: 1 hour }
+      - { scope: per-day, limit_count: 1000, window: 1 day }
+  - api: Push API
+    docs: https://docs.localytics.com/dev/push-api.html
+    limits:
+      - { scope: target_type=customer_id, limit_count: 1000, window: 1 second }
+      - { scope: target_type=broadcast, limit_count: 2, window: 1 minute }
+      - { scope: target_type=profile, limit_count: 100, window: 10 minutes }
+      - { scope: target_type=audience_id, limit_count: 2, window: 1 minute }

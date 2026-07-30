@@ -1,0 +1,51 @@
+generated: '2026-07-20'
+method: derived
+status: candidate
+source: openapi/localytics-campaigns-audiences-openapi.yml
+note: No official Localytics MCP server found; candidate tool list derived one-per-operation from the
+  Campaigns And Audience OpenAPI.
+server:
+  name: localytics
+  transport: http
+tools:
+- name: CreatePushCampaign
+  description: Create a new push campaign with the given parameters. Note that campaigns with `active`
+    status will be sent to end users
+  source_operation: openapi/localytics-campaigns-audiences-openapi.yml#CreatePushCampaign
+- name: GetPushCampaign
+  description: Get the push campaign's audience, creatives, schedule details.
+  source_operation: openapi/localytics-campaigns-audiences-openapi.yml#GetPushCampaign
+- name: DeletePushCampaign
+  description: Delete the push campaign.
+  source_operation: openapi/localytics-campaigns-audiences-openapi.yml#DeletePushCampaign
+- name: editPushCampaign
+  description: Edit a existing campaign with the given parameters. Note that campaigns with `active` status
+    will be sent to end users u
+  source_operation: openapi/localytics-campaigns-audiences-openapi.yml#editPushCampaign
+- name: ArchivePushCampaign
+  description: Archive the push campaign.
+  source_operation: openapi/localytics-campaigns-audiences-openapi.yml#ArchivePushCampaign
+- name: createAudiences
+  description: Create a new audience with the given definition.
+  source_operation: openapi/localytics-campaigns-audiences-openapi.yml#createAudiences
+- name: ListAudiences
+  description: Retrieve all audiences for a given app_id
+  source_operation: openapi/localytics-campaigns-audiences-openapi.yml#ListAudiences
+- name: AudienceSegmentation
+  description: Calculate size for a single audience id.
+  source_operation: openapi/localytics-campaigns-audiences-openapi.yml#AudienceSegmentation
+- name: GetAudienceSegmentationCount
+  description: Retrieve a specific audience
+  source_operation: openapi/localytics-campaigns-audiences-openapi.yml#GetAudienceSegmentationCount
+- name: editAudiences
+  description: Edit a existing audience with the given definition or name.
+  source_operation: openapi/localytics-campaigns-audiences-openapi.yml#editAudiences
+- name: DeleteAudience
+  description: Delete the audience.
+  source_operation: openapi/localytics-campaigns-audiences-openapi.yml#DeleteAudience
+- name: ListCampaigns
+  description: Fetch campaigns (with filters/sort)
+  source_operation: openapi/localytics-campaigns-audiences-openapi.yml#ListCampaigns
+- name: SearchCampaigns
+  description: Search campaigns by keyword
+  source_operation: openapi/localytics-campaigns-audiences-openapi.yml#SearchCampaigns

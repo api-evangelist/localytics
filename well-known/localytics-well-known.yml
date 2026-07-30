@@ -1,0 +1,20 @@
+generated: '2026-07-20'
+method: searched
+note: >-
+  Probed the /.well-known/ discovery surface on the Localytics website, docs and API hosts.
+  None of the standard discovery documents are published (all 404). Absence is recorded data.
+hosts:
+  - host: https://www.localytics.com
+    documents:
+      - { path: /.well-known/security.txt, status: 404 }
+      - { path: /llms.txt, status: 200, file: ../llms/localytics-llms.txt }
+  - host: https://docs.localytics.com
+    documents:
+      - { path: /.well-known/security.txt, status: 404 }
+      - { path: /llms.txt, status: 404 }
+  - host: https://api.localytics.com
+    documents:
+      - { path: /.well-known/security.txt, status: 404 }
+      - { path: /.well-known/openid-configuration, status: 404 }
+      - { path: /.well-known/oauth-authorization-server, status: 404 }
+      - { path: /.well-known/api-catalog, status: 404 }

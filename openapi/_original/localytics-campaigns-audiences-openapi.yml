@@ -1,0 +1,1507 @@
+openapi: 3.0.3
+info:
+  title: Localytics Campaigns And Audience API
+  description: "Localytics is an enterprise-grade mobile intelligence platform for real-time analytics,\
+    \ personalized marketing, and customer lifecycle optimization.\n\n- Campaign Functionality - The platform\
+    \ supports comprehensive campaign creation and management through this API, enabling flexible configuration\
+    \ of goal, scheduling, and target audience.\n\n  * Enables full campaign scheduling with A/B testing\
+    \ via multiple creatives, control-group weights, and advanced scheduling and delivery controls.\n\n\
+    \  * Upload creative assets (HTML/Javascript/CSS assets) via API for the supporting channels (In-App,\
+    \ Inbox)\n\n  * Associate creatives with campaigns using standard formatting options from dashboard.\n\
+    \n  * Supported channels:\n      Push Messaging\n"
+  version: 1.1.2
+servers:
+- url: https://dashboard.localytics.com/api/v6
+security:
+- BasicAuth: []
+tags:
+- name: Push Campaigns
+  description: Requests relating to push-channel campaigns
+- name: Audiences
+  description: Requests relating to audiences
+- name: Campaigns
+  description: Requests relating to all channel campaigns
+paths:
+  /orgs/{org_id}/apps/{app_id}/push/campaigns:
+    post:
+      summary: 'Create a new push campaign with the given parameters. Note that campaigns with `active`
+        status will be sent to end users upon the configured schedule with no further confirmation.
+
+        '
+      tags:
+      - Push Campaigns
+      operationId: CreatePushCampaign
+      parameters:
+      - name: org_id
+        description: The organization id found in your Dashboard containing your app.
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: app_id
+        description: The App Key which will receive this message, which can be found under the settings
+          page of your Dashboard.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Provide the campaign details name, status, conversion attributes, goal, creative_attributes,
+          audiences target_rules, schedule details etc
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushCampaignParams'
+      responses:
+        '201':
+          description: Successfully created the push campaign with given attribute values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignResponse'
+        '401':
+          description: Unauthorized
+        '422':
+          description: Invalid input parameters
+  /orgs/{org_id}/apps/{app_id}/push/campaigns/{campaign_id}:
+    get:
+      summary: Get the push campaign's audience, creatives, schedule details.
+      tags:
+      - Push Campaigns
+      operationId: GetPushCampaign
+      parameters:
+      - name: org_id
+        description: organization id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: app_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: campaign_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Successfully retrieved the campaign details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignResponse'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+    delete:
+      summary: Delete the push campaign.
+      tags:
+      - Push Campaigns
+      operationId: DeletePushCampaign
+      parameters:
+      - name: org_id
+        description: organization id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: app_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: campaign_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Successfully deleted the given push campaign.
+        '401':
+          description: Unauthorized
+        '403':
+          description: Campaign cannot be deleted. It may be active or have jobs running.
+        '404':
+          description: Not found
+    put:
+      summary: 'Edit a existing campaign with the given parameters. Note that campaigns with `active`
+        status will be sent to end users upon the configured schedule with no further confirmation.
+
+        '
+      tags:
+      - Push Campaigns
+      operationId: editPushCampaign
+      parameters:
+      - name: org_id
+        description: The organization id found in your Dashboard containing your app.
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: app_id
+        description: The App Key which will receive this message, which can be found under the settings
+          page of your Dashboard.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: campaign_id
+        in: path
+        required: true
+        description: Campaign id
+        schema:
+          type: integer
+      requestBody:
+        description: Provide the campaign details name, status, conversion attributes, goal, creative_attributes,
+          audiences target_rules, schedule details etc.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushCampaignParams'
+      responses:
+        '200':
+          description: Successfully edited the campaign with the updated values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignResponse'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Campaign not found.
+        '422':
+          description: Invalid input parameters
+  /orgs/{org_id}/apps/{app_id}/push/campaigns/{campaign_id}/archive:
+    put:
+      summary: Archive the push campaign.
+      tags:
+      - Push Campaigns
+      operationId: ArchivePushCampaign
+      parameters:
+      - name: org_id
+        description: organization id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: app_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: campaign_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Successfully archived the given campaign.
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+  /orgs/{org_id}/apps/{app_id}/audiences:
+    post:
+      summary: 'Create a new audience with the given definition.
+
+        '
+      tags:
+      - Audiences
+      operationId: createAudiences
+      parameters:
+      - name: org_id
+        description: The organization id found in your Dashboard containing your app.
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: app_id
+        description: The App Key which will receive this message, which can be found under the settings
+          page of your Dashboard.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Provide the definition rules with behavior and profile conditions.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AudienceParams'
+      responses:
+        '201':
+          description: Successfully created the audience with the given definition rules.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AudienceResponse'
+        '401':
+          description: Unauthorized
+        '422':
+          description: Invalid input parameters
+    get:
+      summary: Retrieve all audiences for a given app_id
+      description: Returns the transformed audience list including profile rules, behavior rules, and
+        segmentation counts.
+      tags:
+      - Audiences
+      operationId: ListAudiences
+      parameters:
+      - name: org_id
+        in: path
+        required: true
+        description: The organization id found in your Dashboard containing your app.
+        schema:
+          type: integer
+      - name: app_id
+        in: path
+        required: true
+        description: The App Key which will receive this message, which can be found under the settings
+          page of your Dashboard.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully returned the list of audiences.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AudienceResponseGet'
+        '401':
+          description: Unauthorized
+  /orgs/{org_id}/apps/{app_id}/audiences/{audience_id}/segmentation:
+    post:
+      summary: Calculate size for a single audience id.
+      tags:
+      - Audiences
+      operationId: AudienceSegmentation
+      parameters:
+      - name: org_id
+        description: The organization id found in your Dashboard containing your app.
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: app_id
+        description: The App Key which will receive this message, which can be found under the settings
+          page of your Dashboard.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: audience_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Successfully saved the calculated segmentation count for a single audience.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AudienceSegmentation'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+  /orgs/{org_id}/apps/{app_id}/audiences/{audience_id}:
+    get:
+      summary: Retrieve a specific audience
+      description: 'Returns segmentation metrics and the audience''s targeting rules for the given audience
+        ID. Includes counts such as total users, users with push tokens, and users seen in the last 30
+        days.
+
+        '
+      tags:
+      - Audiences
+      operationId: GetAudienceSegmentationCount
+      parameters:
+      - name: org_id
+        in: path
+        required: true
+        description: The organization id found in your Dashboard containing your app.
+        schema:
+          type: integer
+      - name: app_id
+        in: path
+        required: true
+        description: The App Key which will receive this message, which can be found under the settings
+          page of your Dashboard.
+        schema:
+          type: string
+      - name: audience_id
+        in: path
+        required: true
+        description: Audience id
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Segmentation count successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AudienceSegmentationCountResponse'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Audience not found or segmentation count missing.
+    patch:
+      summary: 'Edit a existing audience with the given definition or name.
+
+        '
+      tags:
+      - Audiences
+      operationId: editAudiences
+      parameters:
+      - name: org_id
+        description: The organization id found in your Dashboard containing your app.
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: app_id
+        description: The App Key which will receive this message, which can be found under the settings
+          page of your Dashboard.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: audience_id
+        in: path
+        required: true
+        description: Audience id
+        schema:
+          type: integer
+      requestBody:
+        description: Provide the definition rules with behavior and profile conditions or name.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AudienceParams'
+      responses:
+        '200':
+          description: Successfully edited the audience with the given definition rules or name.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AudienceResponse'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Audience not found or segmentation count missing.
+        '422':
+          description: Invalid input parameters
+    delete:
+      summary: Delete the audience.
+      tags:
+      - Audiences
+      operationId: DeleteAudience
+      parameters:
+      - name: org_id
+        description: organization id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: app_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: audience_id
+        in: path
+        required: true
+        description: Audience id
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Successfully deleted the given audience.
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '422':
+          description: Audience is already deleted.
+  /orgs/{org_id}/apps/{app_id}/campaigns:
+    get:
+      summary: Fetch campaigns (with filters/sort)
+      description: Returns a list of campaigns filtered by the given query parameters
+      tags:
+      - Campaigns
+      operationId: ListCampaigns
+      parameters:
+      - name: org_id
+        in: path
+        required: true
+        description: The organization id found in your Dashboard containing your app.
+        schema:
+          type: integer
+      - name: app_id
+        in: path
+        required: true
+        description: app id value
+        schema:
+          type: string
+      - name: channel
+        in: query
+        required: false
+        description: Comma-separated values if multiple channels. Optional filter parameter.
+        schema:
+          type: string
+          enum:
+          - push
+          - in-app
+          - inbox
+          - places
+      - name: status
+        in: query
+        required: false
+        description: Comma-separated values if multiple campaign statuses
+        schema:
+          type: string
+          enum:
+          - scheduled
+          - draft
+          - active
+          - inactive
+          - expired
+          - sent
+          - test
+      - name: sort_by
+        in: query
+        required: false
+        description: Column to sort by
+        schema:
+          type: string
+          enum:
+          - created_at
+          - name
+      - name: sort_order
+        in: query
+        required: false
+        description: Order of sorting
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: per_page
+        in: query
+        required: false
+        description: Number of records per API call (100 by default)
+        schema:
+          type: integer
+      - name: recurring
+        in: query
+        required: false
+        description: '0: none and both, 1: recurring, 2: only one-time, 3: either recurring OR one-time'
+        schema:
+          type: integer
+          enum:
+          - 0
+          - 1
+          - 2
+          - 3
+      - name: is_archived
+        in: query
+        required: false
+        description: '0: unarchived, 1: archived'
+        schema:
+          type: integer
+          enum:
+          - 0
+          - 1
+      - name: page_number
+        in: query
+        schema:
+          type: integer
+        description: Page number for pagination
+      responses:
+        '200':
+          description: Successful response on listing all campaigns based on filters if any.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCampaignResponse'
+        '404':
+          description: Not Found – Resource not found
+        '422':
+          description: Invalid input parameters
+        '500':
+          description: Internal Server Error
+  /orgs/{org_id}/apps/{app_id}/campaigns/search:
+    get:
+      summary: Search campaigns by keyword
+      description: Fetches campaigns by name or ID using a required key param
+      tags:
+      - Campaigns
+      operationId: SearchCampaigns
+      parameters:
+      - name: org_id
+        in: path
+        required: true
+        description: The organization id found in your Dashboard containing your app.
+        schema:
+          type: integer
+      - name: app_id
+        in: path
+        required: true
+        description: app id value
+        schema:
+          type: string
+      - name: key
+        in: query
+        required: true
+        description: Key to search by name or campaign ID
+        schema:
+          type: string
+      - name: channel
+        in: query
+        required: false
+        description: Comma-separated values if multiple channels. Optional filter parameter.
+        schema:
+          type: string
+          enum:
+          - push
+          - in-app
+          - inbox
+          - places
+      - name: status
+        in: query
+        required: false
+        description: Comma-separated values if multiple campaign statuses
+        schema:
+          type: string
+          enum:
+          - scheduled
+          - draft
+          - active
+          - inactive
+          - expired
+          - sent
+          - test
+          - error
+      - name: sort_by
+        in: query
+        required: false
+        description: Column to sort by
+        schema:
+          type: string
+          enum:
+          - created_at
+          - name
+      - name: sort_order
+        in: query
+        required: false
+        description: Order of sorting
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: per_page
+        in: query
+        required: false
+        description: Number of records per API call (100 by default)
+        schema:
+          type: integer
+      - name: recurring
+        in: query
+        required: false
+        description: '0: none and both, 1: recurring, 2: only one-time, 3: either recurring OR one-time'
+        schema:
+          type: integer
+          enum:
+          - 0
+          - 1
+          - 2
+          - 3
+      - name: is_archived
+        in: query
+        required: false
+        description: '0: unarchived, 1: archived'
+        schema:
+          type: integer
+          enum:
+          - 0
+          - 1
+      - name: page_number
+        in: query
+        schema:
+          type: integer
+        description: Page number for pagination
+      responses:
+        '200':
+          description: Successful response on listing all campaigns based on filters if any and search
+            key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCampaignResponse'
+        '404':
+          description: Not Found – Resource not found
+        '422':
+          description: Invalid input parameters
+        '500':
+          description: Internal Server Error
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    AudienceBehaviorConditions:
+      type: object
+      properties:
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/AudienceFilter'
+        operator:
+          type: string
+          enum:
+          - and
+          - or
+    AudienceBehaviorRule:
+      type: object
+      properties:
+        count:
+          type: integer
+        count_operator:
+          type: string
+          enum:
+          - less_than
+          - exactly
+          - atleast
+        event_name:
+          type: string
+        conditions:
+          $ref: '#/components/schemas/AudienceBehaviorConditions'
+        neg_time_window:
+          type: array
+          items:
+            type: integer
+    AudienceBehaviorRules:
+      type: object
+      properties:
+        days:
+          type: integer
+        behavior_rule_operator:
+          type: string
+          enum:
+          - and
+          - or
+          - and_then
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/AudienceBehaviorRule'
+    AudienceDefinition:
+      type: object
+      required:
+      - targeting_type
+      anyOf:
+      - required:
+        - behavior
+      - required:
+        - profile
+      properties:
+        behavior_profile_operator:
+          type: string
+          enum:
+          - or
+          - and
+          description: Required if both behavior and profile are defined.
+        targeting_type:
+          type: string
+          enum:
+          - install_id
+          - customer_id
+          description: install_id will send to users across all of their devices, for example, their phone
+            and tablet. customer_id will target only users on their latest device.
+        behavior:
+          type: object
+          properties:
+            days:
+              type: integer
+              example: 30
+              minimum: 1
+              description: Number of days to include in the query (e.g., last N days)
+            behavior_rule_operator:
+              type: string
+              enum:
+              - and
+              - or
+              - and_then
+              description: and_then only allowed for 2 rules, the first of which must be event, and the
+                second of which can be event or not-event.
+            rules:
+              type: array
+              items:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 1
+                  count_operator:
+                    type: string
+                    enum:
+                    - less_than
+                    - exactly
+                    - atleast
+                  event_name:
+                    type: string
+                    description: event_name which should be in event list.
+                  rule_type:
+                    type: string
+                    enum:
+                    - not-event
+                    - event
+                    - not-session
+                    - session
+                  conditions:
+                    type: object
+                    properties:
+                      filters:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            dimension_name:
+                              type: string
+                              example: App Version
+                            operator:
+                              type: string
+                              oneOf:
+                              - $ref: '#/components/schemas/DimensionStringOperators'
+                              - $ref: '#/components/schemas/DimensionNumberOperators'
+                              - $ref: '#/components/schemas/DimensionVersionOperators'
+                            value:
+                              oneOf:
+                              - type: string
+                              - type: integer
+                              - type: array
+                                items:
+                                  type: string
+                      operator:
+                        type: string
+                        enum:
+                        - or
+                        - and
+                  neg_time_window:
+                    type: array
+                    items:
+                      type: integer
+                    example:
+                    - 0
+                    - 15
+                required:
+                - count
+                - count_operator
+                - conditions
+          required:
+          - days
+          - behavior_rule_operator
+          - rules
+        profile:
+          $ref: '#/components/schemas/ProfileDefinition'
+    AudienceFilter:
+      type: object
+      properties:
+        dimension_name:
+          type: string
+        operator:
+          type: string
+          example: is one of
+        value:
+          oneOf:
+          - type: string
+          - type: integer
+          - type: array
+            items:
+              type: string
+    AudienceResponseGet:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          nullable: true
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+          nullable: true
+        target_rules:
+          $ref: '#/components/schemas/AudienceTargetRules'
+        segmentation_count:
+          $ref: '#/components/schemas/SegmentationCount'
+    AudienceSegmentationCountResponse:
+      type: object
+      properties:
+        segmentation_id:
+          type: string
+        user_count:
+          type: integer
+        has_push:
+          type: integer
+          nullable: true
+        seen_last_thirty:
+          type: integer
+        updated_at:
+          type: string
+          format: date-time
+        target_rules:
+          $ref: '#/components/schemas/AudienceTargetRules'
+    AudienceTargetRules:
+      type: object
+      properties:
+        profile:
+          $ref: '#/components/schemas/AudienceProfileRules'
+        behavior:
+          $ref: '#/components/schemas/AudienceBehaviorRules'
+        behavior_profile_operator:
+          type: string
+          enum:
+          - and
+          - or
+        targeting_type:
+          type: string
+          enum:
+          - install_id
+          - customer_id
+    AudienceProfileRules:
+      type: object
+      properties:
+        criteria:
+          type: array
+          items:
+            $ref: '#/components/schemas/AudienceProfileCriterion'
+        operator:
+          type: string
+          enum:
+          - and
+          - or
+    AudienceProfileCriterion:
+      type: object
+      properties:
+        key:
+          type: string
+        values:
+          type: array
+          items:
+            type: string
+        operator:
+          type: string
+          example: is one of
+    CampaignParams:
+      type: object
+      required:
+      - name
+      - status
+      - goal
+      - audiences
+      - schedule
+      - creatives
+      properties:
+        name:
+          type: string
+          description: Give any campaign name.
+        status:
+          type: string
+          enum:
+          - active
+          - draft
+        goal:
+          type: string
+          enum:
+          - activate
+          - drive_behavior
+          - nurture
+          - monetize
+          - reengage
+          - notify
+        conversion_event:
+          type: object
+          description: Optional object for campaign performance tracking based upon whether receiving
+            users later trigger this event. If undefined, then this campaign will disable conversion tracking.
+          properties:
+            event_name:
+              type: string
+              description: event_name which should be in event list.
+            conversion_attributes:
+              type: object
+              properties:
+                filters:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      dimension_name:
+                        type: string
+                        example: App Version
+                      operator:
+                        type: string
+                        enum:
+                        - is_one_of
+                        - is_none_of
+                      value:
+                        oneOf:
+                        - type: string
+                        - type: integer
+                        - type: array
+                          items:
+                            type: string
+                operator:
+                  type: string
+                  enum:
+                  - and
+                  - or
+              required:
+              - filters
+              - operator
+        audiences:
+          type: object
+          properties:
+            campaign_type:
+              type: string
+              enum:
+              - everyone
+              - saved_audience
+              - new_audience
+            control_group_percent:
+              type: integer
+              example: 5
+            target_rules:
+              description: Required if campaign_type = new_audience or saved_audience. Must match TargetRulesNewAudience
+                or TargetRulesAudienceExisting.
+              oneOf:
+              - $ref: '#/components/schemas/TargetRulesNewAudience'
+              - $ref: '#/components/schemas/TargetRulesAudienceExisting'
+          oneOf:
+          - required:
+            - campaign_type
+            properties:
+              campaign_type:
+                type: string
+                enum:
+                - everyone
+          - required:
+            - campaign_type
+            - target_rules
+            properties:
+              campaign_type:
+                type: string
+                enum:
+                - new_audience
+              target_rules:
+                $ref: '#/components/schemas/TargetRulesNewAudience'
+          - required:
+            - campaign_type
+            - target_rules
+            properties:
+              campaign_type:
+                type: string
+                enum:
+                - saved_audience
+              target_rules:
+                $ref: '#/components/schemas/TargetRulesAudienceExisting'
+          required:
+          - campaign_type
+    PushCampaignParams:
+      allOf:
+      - $ref: '#/components/schemas/CampaignParams'
+      - type: object
+        properties:
+          schedule:
+            $ref: '#/components/schemas/Schedule'
+          creatives:
+            $ref: '#/components/schemas/CreativesAttributes'
+    TargetRulesAudienceExisting:
+      type: object
+      properties:
+        audience:
+          type: array
+          items:
+            type: integer
+    TargetRulesNewAudience:
+      $ref: '#/components/schemas/AudienceDefinition'
+    CreativesAttributes:
+      allOf:
+      - type: object
+      - properties:
+          title:
+            type: string
+          percent:
+            type: integer
+          key_values:
+            type: array
+            items:
+              type: object
+              properties:
+                key:
+                  type: string
+                value:
+                  type: string
+      - $ref: '#/components/schemas/BuildAttributes'
+    BuildAttributes:
+      type: object
+      properties:
+        build_attributes:
+          type: object
+          properties:
+            push_message:
+              type: string
+            push_title:
+              type: string
+            push_subtitle:
+              type: string
+            attachment_url:
+              type: string
+              example: https://sample.com/p/rp/859d34a70914df30.png
+              description: Rich media displayed in the push message. Required if ll_mi_deep_link_url is
+                defined.
+            push_category:
+              type: string
+              example: like_dislike
+            ll_mi_deep_link_url:
+              type: string
+              example: https://sample.com/p/rp/859d34a70914df30.png
+              description: 'This should be a URL generated from a Movable Ink partner snippet, otherwise
+                see `ll_deep_link_url`.
+
+                '
+            ll_deep_link_url:
+              type: string
+              description: The deep link URL to open when the user clicks the message. Web URLs and custom
+                app URL schemes are supported.
+              example: yourappname://product/12345?color=red&size=large
+            sound:
+              type: string
+              description: Allowed for only ios platform.
+          anyOf:
+          - required:
+            - push_message
+          - required:
+            - push_title
+          - required:
+            - attachment_url
+    Schedule:
+      type: object
+      anyOf:
+      - required:
+        - begin_immediately
+      - required:
+        - on_schedule
+      - required:
+        - recurring
+      - required:
+        - optimized
+      properties:
+        begin_immediately:
+          $ref: '#/components/schemas/BeginImmediately'
+        on_schedule:
+          $ref: '#/components/schemas/OnSchedule'
+        recurring:
+          $ref: '#/components/schemas/Recurring'
+        optimized:
+          $ref: '#/components/schemas/Optimized'
+    ScheduleResponse:
+      type: object
+      anyOf:
+      - required:
+        - begin_immediately
+      - required:
+        - on_schedule
+      - required:
+        - recurring
+      - required:
+        - optimized
+      properties:
+        begin_immediately:
+          $ref: '#/components/schemas/BeginImmediately'
+        on_schedule:
+          $ref: '#/components/schemas/OnSchedule'
+        recurring:
+          $ref: '#/components/schemas/RecurringResponse'
+        optimized:
+          $ref: '#/components/schemas/Optimized'
+    SegmentationCount:
+      type: object
+      properties:
+        user_count:
+          type: integer
+        has_push:
+          type: integer
+        seen_last_thirty:
+          type: integer
+        updated_at:
+          type: string
+          format: date-time
+    BeginImmediately:
+      type: object
+      properties:
+        push_throttle_num_msgs:
+          type: integer
+    OnSchedule:
+      type: object
+      properties:
+        begin_date:
+          type: string
+          format: date
+          example: '2025-08-26T04:30:00.000Z'
+          description: Date in UTC format
+        starting_time_zone_id:
+          type: integer
+        push_throttle_num_msgs:
+          type: integer
+          description: push_throttle_num_msgs cannot be defined if starting_time_zone_id is given.
+      required:
+      - begin_date
+    RecurringParams:
+      type: object
+      properties:
+        begin_date:
+          type: string
+          format: date
+          example: '2025-08-26T04:30:00.000Z'
+          description: Date in UTC format
+        end_date:
+          type: string
+          format: date
+          example: '2025-08-26T04:30:00.000Z'
+          description: Date in UTC format
+        starting_time_zone_id:
+          type: integer
+        push_throttle_num_msgs:
+          type: integer
+          description: push_throttle_num_msgs cannot be defined if starting_time_zone_id is given.
+        frequency_attributes:
+          $ref: '#/components/schemas/FrequencyCappingAttributes'
+      required:
+      - begin_date
+      - intervals
+    Recurring:
+      allOf:
+      - $ref: '#/components/schemas/RecurringParams'
+      - type: object
+        properties:
+          intervals:
+            $ref: '#/components/schemas/Intervals'
+    RecurringResponse:
+      allOf:
+      - $ref: '#/components/schemas/RecurringParams'
+      - type: object
+        properties:
+          intervals:
+            $ref: '#/components/schemas/IntervalsResponse'
+    Optimized:
+      type: object
+      properties:
+        fallback_time:
+          type: string
+          format: date
+          example: '2025-08-26T04:30:00.000Z'
+          description: Date in UTC format
+      required:
+      - fallback_time
+    Intervals:
+      type: array
+      items:
+        type: object
+        properties:
+          interval:
+            type: string
+            enum:
+            - weekly
+            - monthly
+            - every hour
+            - every day
+            - every other day
+          day_of_week:
+            type: string
+            example: sunday
+            description: Required when interval is weekly.
+          on_day:
+            type: integer
+            description: Required when interval is monthly.
+    IntervalsResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          interval:
+            type: string
+            enum:
+            - weekly
+            - monthly
+            - every hour
+            - every day
+            - every other day
+          interval_start:
+            type: string
+            format: date
+            example: '2025-08-26T04:30:00.000Z'
+            description: Date in UTC format
+          day_of_week:
+            type: string
+            example: sunday
+          on_day:
+            type: integer
+    CreativesAttributesResponse:
+      allOf:
+      - type: object
+      - properties:
+          id:
+            type: integer
+          letter:
+            type: string
+            example: A
+      - $ref: '#/components/schemas/CreativesAttributes'
+    CampaignResponse:
+      allOf:
+      - type: object
+      - properties:
+          id:
+            type: integer
+      - $ref: '#/components/schemas/CampaignParams'
+      - type: object
+        properties:
+          schedule:
+            $ref: '#/components/schemas/ScheduleResponse'
+          creatives:
+            $ref: '#/components/schemas/CreativesAttributesResponse'
+    ProfileDefinition:
+      type: object
+      required:
+      - criteria
+      - operator
+      properties:
+        criteria:
+          type: array
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+              scope:
+                type: string
+                enum:
+                - app
+                - org
+                description: App - Profile attribute specific to the selected app Org - A global profile
+                  attribute common to all your apps
+              date_type:
+                type: string
+                enum:
+                - date
+                - days ago
+                - days from now
+                description: Required when the key is date type.
+              operator:
+                type: string
+                oneOf:
+                - $ref: '#/components/schemas/StringOperators'
+                - $ref: '#/components/schemas/NumberOperators'
+                - $ref: '#/components/schemas/DateOperators'
+              values:
+                type: array
+                items:
+                  type: string
+                description: values are not required for is_defined and is_not_defined operator.
+            required:
+            - key
+            - scope
+            - operator
+            - values
+        operator:
+          type: string
+          enum:
+          - and
+          - or
+    FrequencyCappingAttributes:
+      type: array
+      items:
+        properties:
+          name:
+            type: string
+            enum:
+            - messages_per_days
+            - total_message_ever
+          days:
+            type: integer
+            description: Required only when name = messages_per_days
+          count:
+            type: integer
+          messages_atleast_days_apart:
+            type: integer
+            description: Required only when name = messages_per_days
+        required:
+        - name
+        - count
+    AudienceParams:
+      type: object
+      required:
+      - name
+      - target_rules
+      properties:
+        name:
+          type: string
+        target_rules:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/TargetRulesNewAudience'
+    AudienceResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        created_at:
+          type: string
+        target_rules:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/TargetRulesNewAudience'
+        segmentation_count:
+          type: object
+          properties:
+            user_count:
+              type: integer
+            has_push:
+              type: integer
+            seen_last_thirty:
+              type: integer
+    StringOperators:
+      type: string
+      enum:
+      - is defined
+      - is not defined
+      - is one of
+      - is none of
+    NumberOperators:
+      type: string
+      enum:
+      - is one of
+      - is none of
+      - <
+      - <=
+      - '>'
+      - '>='
+      - is between
+      - is defined
+    DateOperators:
+      type: string
+      enum:
+      - is on or before
+      - is on or after
+      - is exactly
+      - is not
+      - is between
+      - is defined
+      - is not defined
+    DimensionNumberOperators:
+      type: string
+      enum:
+      - is one of
+      - is none of
+      - greater than
+      - at least
+      - less than
+      - no more than
+      - equal to
+      - between
+    DimensionStringOperators:
+      type: string
+      enum:
+      - is one of
+      - is none of
+    DimensionVersionOperators:
+      type: string
+      enum:
+      - is one of
+      - is none of
+      - greater than
+      - less than
+    AudienceSegmentation:
+      type: object
+      properties:
+        segmentation_id:
+          type: integer
+        user_count:
+          type: integer
+        has_push:
+          type: integer
+        seen_last_thirty:
+          type: integer
+        last_calculated_on:
+          type: string
+          format: date
+          example: '2025-11-26T10:34:18Z'
+    ListCampaignResponse:
+      type: object
+      properties:
+        app_id:
+          type: string
+        records_count:
+          type: integer
+        total_records:
+          type: integer
+        campaigns:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              message_type:
+                type: string
+              platform:
+                type: string
+              send_local_tz:
+                type: integer
+              recurring:
+                type: integer
+              begin_date:
+                type: string
+                format: date-time
+                nullable: true
+              end_date:
+                type: string
+                format: date-time
+                nullable: true
+              status:
+                type: string
+              created_at:
+                type: string
+                format: date-time
+              updated_at:
+                type: string
+                format: date-time
+              sends:
+                type: integer
+              open_rate:
+                type: string
+                example: 10.4%

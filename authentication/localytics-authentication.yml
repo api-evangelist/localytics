@@ -1,0 +1,12 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/localytics-campaigns-audiences-openapi.yml
+summary:
+  types:
+  - http
+schemes:
+- name: BasicAuth
+  type: http
+  scheme: basic
+  sources:
+  - openapi/localytics-campaigns-audiences-openapi.yml

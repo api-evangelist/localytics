@@ -1,0 +1,30 @@
+# Localytics
+
+> Mobile analytics and engagement platform. Localytics reads the signals your app is already producing and turns them into personalized campaigns — push, in-app, and inbox messaging — that reach each customer when it matters most.
+
+Localytics helps product, marketing, and engineering teams understand mobile app users and engage them through targeted, data-driven campaigns across push notifications, in-app messages, and inbox messaging.
+
+## Pages
+
+- [Home](/): Mobile analytics and engagement platform overview.
+- [For Marketers](/for-marketers): Audience segmentation and campaign tools for mobile marketers.
+- [For Product Analytics](/for-product-analytics): Behavioral analytics and user insights for product teams.
+- [For Developers](/for-developers): SDKs, APIs, and integration tools for engineering teams.
+- [Mobile Analytics](/mobile-analytics): Real-time mobile app analytics and reporting.
+- [Push Messaging](/push-messaging): Personalized push notification campaigns.
+- [In-App Messaging](/in-app-messaging): Targeted in-app message experiences.
+- [Inbox Messaging](/inbox-messaging): Persistent inbox messaging for mobile apps.
+- [APIs](/apis): Developer APIs and integration documentation.
+- [Services](/services): Strategic services and customer success offerings.
+- [Team](/team): Leadership and the people behind Localytics.
+- [Contact](/contact): Get in touch with the Localytics team.
+- [FAQ](/faq): Frequently asked questions about the platform.
+- [Blog](/blog): Insights on mobile analytics, engagement, and app marketing.
+- [Jobs](/jobs): Open positions at Localytics.
+
+## Optional
+
+- [Beta Invites](/beta-invites): Sign up for early access to new features.
+- [Privacy Policy](/privacy): How Localytics handles your data.
+- [Terms of Service](/terms): Terms governing use of the platform.
+- [Security](/security): Our security practices and certifications.

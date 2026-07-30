@@ -1,0 +1,58 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/localytics-campaigns-audiences-openapi.yml
+format: http-status
+envelope: JSON error body (no application/problem+json declared)
+note: Derived from OpenAPI 4xx/5xx responses of the Campaigns And Audience API.
+problems:
+- status: 401
+  title: Unauthorized
+  description: Unauthorized
+  source_operations:
+  - openapi/localytics-campaigns-audiences-openapi.yml#CreatePushCampaign
+  - openapi/localytics-campaigns-audiences-openapi.yml#GetPushCampaign
+  - openapi/localytics-campaigns-audiences-openapi.yml#DeletePushCampaign
+  - openapi/localytics-campaigns-audiences-openapi.yml#editPushCampaign
+  - openapi/localytics-campaigns-audiences-openapi.yml#ArchivePushCampaign
+  - openapi/localytics-campaigns-audiences-openapi.yml#createAudiences
+  - openapi/localytics-campaigns-audiences-openapi.yml#ListAudiences
+  - openapi/localytics-campaigns-audiences-openapi.yml#AudienceSegmentation
+  - openapi/localytics-campaigns-audiences-openapi.yml#GetAudienceSegmentationCount
+  - openapi/localytics-campaigns-audiences-openapi.yml#editAudiences
+  - openapi/localytics-campaigns-audiences-openapi.yml#DeleteAudience
+- status: 403
+  title: Forbidden
+  description: Campaign cannot be deleted. It may be active or have jobs running.
+  source_operations:
+  - openapi/localytics-campaigns-audiences-openapi.yml#DeletePushCampaign
+- status: 404
+  title: Not found
+  description: Not found
+  source_operations:
+  - openapi/localytics-campaigns-audiences-openapi.yml#GetPushCampaign
+  - openapi/localytics-campaigns-audiences-openapi.yml#DeletePushCampaign
+  - openapi/localytics-campaigns-audiences-openapi.yml#editPushCampaign
+  - openapi/localytics-campaigns-audiences-openapi.yml#ArchivePushCampaign
+  - openapi/localytics-campaigns-audiences-openapi.yml#AudienceSegmentation
+  - openapi/localytics-campaigns-audiences-openapi.yml#GetAudienceSegmentationCount
+  - openapi/localytics-campaigns-audiences-openapi.yml#editAudiences
+  - openapi/localytics-campaigns-audiences-openapi.yml#DeleteAudience
+  - openapi/localytics-campaigns-audiences-openapi.yml#ListCampaigns
+  - openapi/localytics-campaigns-audiences-openapi.yml#SearchCampaigns
+- status: 422
+  title: Invalid input parameters
+  description: Invalid input parameters
+  source_operations:
+  - openapi/localytics-campaigns-audiences-openapi.yml#CreatePushCampaign
+  - openapi/localytics-campaigns-audiences-openapi.yml#editPushCampaign
+  - openapi/localytics-campaigns-audiences-openapi.yml#createAudiences
+  - openapi/localytics-campaigns-audiences-openapi.yml#editAudiences
+  - openapi/localytics-campaigns-audiences-openapi.yml#DeleteAudience
+  - openapi/localytics-campaigns-audiences-openapi.yml#ListCampaigns
+  - openapi/localytics-campaigns-audiences-openapi.yml#SearchCampaigns
+- status: 500
+  title: Internal Server Error
+  description: Internal Server Error
+  source_operations:
+  - openapi/localytics-campaigns-audiences-openapi.yml#ListCampaigns
+  - openapi/localytics-campaigns-audiences-openapi.yml#SearchCampaigns
