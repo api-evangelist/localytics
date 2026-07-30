@@ -1,8 +1,15 @@
 aid: localytics
 name: Localytics
-description: 'Localytics is a company surfaced as a portfolio company of sapphire-ventures, techstars
-  and added to the API Evangelist network as a stub for enrichment. Sector: martech. This profile is a
-  lead awaiting the enrichment pipeline.'
+description: >-
+  Localytics is a mobile analytics and customer-engagement platform that turns the behavioral
+  signals a mobile app already produces into real-time analytics and personalized, data-driven
+  campaigns across push notifications, in-app messages, and inbox messaging. It serves product,
+  marketing, and engineering teams with segmentation, audience building, and campaign management.
+  For developers it exposes a set of HTTP REST APIs — a Query/Reporting API (HAL+JSON), a Push
+  API for message delivery, and a Campaigns & Audience API (OpenAPI 3.0.3) for programmatic
+  campaign and audience management — alongside first-party SDKs for Android, iOS, Apple TV, React
+  Native, Web, and Windows. Added to the API Evangelist network as a portfolio lead and enriched
+  from its live developer documentation.
 url: https://raw.githubusercontent.com/api-evangelist/localytics/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -11,18 +18,127 @@ x-backed-by:
 - techstars
 x-tier: stub
 x-tier-reason: portfolio-lead
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-20'
+image: https://localytics.com/og-image.png
 tags:
 - Company
 - Martech
-apis: []
+- Mobile Analytics
+- Push Notifications
+- Customer Engagement
+- Marketing Automation
+- APIs
+apis:
+- aid: localytics:localytics-audiences-api
+  name: Localytics Audiences API
+  description: Requests relating to audiences
+  humanURL: https://docs.localytics.com/campaigns_audiences_api.html
+  baseURL: https://dashboard.localytics.com/api/v6
+  tags:
+  - Audiences
+  properties:
+  - type: OpenAPI
+    url: openapi/localytics-audiences-api-openapi.yml
+  - type: APIReference
+    url: https://docs.localytics.com/campaigns_audiences_api.html
+- aid: localytics:localytics-campaigns-api
+  name: Localytics Campaigns API
+  description: Requests relating to all channel campaigns
+  humanURL: https://docs.localytics.com/campaigns_audiences_api.html
+  baseURL: https://dashboard.localytics.com/api/v6
+  tags:
+  - Campaigns
+  properties:
+  - type: OpenAPI
+    url: openapi/localytics-campaigns-api-openapi.yml
+  - type: APIReference
+    url: https://docs.localytics.com/campaigns_audiences_api.html
+- aid: localytics:localytics-push-campaigns-api
+  name: Localytics Push Campaigns API
+  description: Requests relating to push-channel campaigns
+  humanURL: https://docs.localytics.com/campaigns_audiences_api.html
+  baseURL: https://dashboard.localytics.com/api/v6
+  tags:
+  - Push Campaigns
+  properties:
+  - type: OpenAPI
+    url: openapi/localytics-push-campaigns-api-openapi.yml
+  - type: APIReference
+    url: https://docs.localytics.com/campaigns_audiences_api.html
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DeveloperPortal
+  url: https://docs.localytics.com/
+- type: Documentation
+  url: https://docs.localytics.com/dev/
+- type: APIReference
+  url: https://docs.localytics.com/campaigns_audiences_api.html
+- type: GettingStarted
+  url: https://docs.localytics.com/docs/resources/developer-documentation
+- type: Support
+  url: https://www.localytics.com/contact
+- type: Blog
+  url: https://www.localytics.com/blog
+- type: PrivacyPolicy
+  url: https://www.localytics.com/privacy
+- type: TermsOfService
+  url: https://www.localytics.com/terms
+- type: OpenAPI
+  url: openapi/localytics-campaigns-audiences-openapi.yml
+- type: Overlay
+  url: overlays/localytics-campaigns-audiences-overlay.yaml
+- type: Authentication
+  url: authentication/localytics-authentication.yml
+- type: Conventions
+  url: conventions/localytics-conventions.yml
+- type: Idempotency
+  url: conventions/localytics-conventions.yml
+- type: ErrorCatalog
+  url: errors/localytics-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/localytics-lifecycle.yml
+- type: RateLimits
+  url: rate-limits/localytics-rate-limits.yml
+- type: Conformance
+  url: conformance/localytics-conformance.yml
+- type: DataModel
+  url: data-model/localytics-data-model.yml
+- type: Packages
+  url: packages/localytics-packages.yml
+- type: SDKs
+  url: packages/localytics-packages.yml
+- type: LLMsTxt
+  url: llms/localytics-llms.txt
+- type: MCPServer
+  url: mcp/localytics-mcp.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: AgenticAccess
+  url: agentic-access/localytics-agentic-access.yml
+- type: DomainSecurity
+  url: security/localytics-domain-security.yml
 - type: Website
   url: https://www.localytics.com/
+x-enrichment:
+  date: '2026-07-20'
+  status: enriched
+  artifacts_added: 18
+  pass: local-v1
