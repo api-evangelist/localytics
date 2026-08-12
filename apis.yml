@@ -102,7 +102,7 @@ common:
 - type: TermsOfService
   url: https://www.localytics.com/terms
 - type: OpenAPI
-  url: openapi/localytics-campaigns-audiences-openapi.yml
+  url: openapi/_original/localytics-campaigns-audiences-openapi.yml
 - type: Overlay
   url: overlays/localytics-campaigns-audiences-overlay.yaml
 - type: Authentication
