@@ -5,11 +5,15 @@ description: >-
   signals a mobile app already produces into real-time analytics and personalized, data-driven
   campaigns across push notifications, in-app messages, and inbox messaging. It serves product,
   marketing, and engineering teams with segmentation, audience building, and campaign management.
-  For developers it exposes a set of HTTP REST APIs — a Query/Reporting API (HAL+JSON), a Push
-  API for message delivery, and a Campaigns & Audience API (OpenAPI 3.0.3) for programmatic
-  campaign and audience management — alongside first-party SDKs for Android, iOS, Apple TV, React
-  Native, Web, and Windows. Added to the API Evangelist network as a portfolio lead and enriched
-  from its live developer documentation.
+  Its developer surface is broad but unevenly specified: two real OpenAPI 3.0.3 documents (a
+  Campaigns & Audience API and a Transactional Push API served live at
+  messaging.localytics.com/swagger.json), an MIT-licensed proto3 definition for a bidirectional
+  streaming gRPC push service, and a published JSON Schema for Events API requests — alongside six
+  further production REST APIs (Query/Reporting in HAL+JSON, Profile, Events, Exports, Imports,
+  Places) that are documented only in prose. Everything authenticates with one organization-level
+  API key and secret over HTTP Basic; there is no OAuth, no scopes and no rate-limit response
+  headers anywhere. First-party SDKs cover iOS, Android, Web, Maui, Flutter, React Native, tvOS,
+  Xamarin, Unity, Cordova and Windows. Localytics is an Upland Software product.
 url: https://raw.githubusercontent.com/api-evangelist/localytics/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -32,7 +36,7 @@ accessModel:
   method: derived
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-20'
+modified: '2026-08-13'
 image: https://localytics.com/og-image.png
 tags:
 - Company
@@ -42,6 +46,11 @@ tags:
 - Customer Engagement
 - Marketing Automation
 - APIs
+- Mobile
+- Segmentation
+- Audiences
+- Event Ingestion
+- gRPC
 apis:
 - aid: localytics:localytics-audiences-api
   name: Localytics Audiences API
@@ -79,6 +88,120 @@ apis:
     url: openapi/localytics-push-campaigns-api-openapi.yml
   - type: APIReference
     url: https://docs.localytics.com/campaigns_audiences_api.html
+- aid: localytics:localytics-transactional-push-api
+  name: Localytics Transactional Push API
+  description: >-
+    Programmatic push messaging delivery. Submit a batch of pushes for an application targeting
+    customer_ids, an audience_id, a profile query, or a broadcast; messages are forwarded to
+    push-segmenter or message-delivery depending on target type. OpenAPI 3.0.3 served live by
+    Localytics at https://messaging.localytics.com/swagger.json with a Swagger UI at /docs.
+  humanURL: https://docs.localytics.com/dev/push-api.html
+  baseURL: https://messaging.localytics.com
+  tags:
+  - Push Notifications
+  - Messaging
+  - Transactional
+  properties:
+  - type: OpenAPI
+    url: openapi/_original/localytics-transactional-push-openapi.json
+  - type: Overlay
+    url: overlays/localytics-transactional-push-overlay.yaml
+  - type: APIReference
+    url: https://docs.localytics.com/dev/push-api.html
+  - type: Protobuf
+    url: grpc/localytics-push.proto
+  - type: AgentSkill
+    url: skills/localytics-send-transactional-push.md
+- aid: localytics:localytics-query-api
+  name: Localytics Query API
+  description: >-
+    HAL+JSON reporting and analytics API. Run queries over apps, events, sessions, users, profiles
+    and attribution data with metrics, dimensions and conditions; the service root at
+    https://api.localytics.com/v1 returns application/vnd.localytics.v1+hal+json with templated
+    _links. No machine-readable specification is published.
+  humanURL: https://docs.localytics.com/dev/query-api.html
+  baseURL: https://api.localytics.com/v1
+  tags:
+  - Analytics
+  - Reporting
+  - Query
+  properties:
+  - type: APIReference
+    url: https://docs.localytics.com/dev/query-api.html
+- aid: localytics:localytics-profile-api
+  name: Localytics Profile API
+  description: >-
+    Read, create, update and delete user profile attributes used for targeting and segmentation,
+    addressed by customer_id at the org, app or customer scope. No machine-readable specification
+    is published.
+  humanURL: https://docs.localytics.com/dev/profile-api.html
+  baseURL: https://profile.localytics.com/v1
+  tags:
+  - Profiles
+  - Customer Data
+  properties:
+  - type: APIReference
+    url: https://docs.localytics.com/dev/profile-api.html
+- aid: localytics:localytics-events-api
+  name: Localytics Events API
+  description: >-
+    Server-side event ingestion for in-app activity that completes off-device (purchases,
+    fulfilment, backend conversions). Accepts JSON or gzipped JSON up to 256 KB per POST, validated
+    against a published versioned JSON Schema.
+  humanURL: https://docs.localytics.com/dev/events-api.html
+  baseURL: https://analytics.localytics.com/events/v1
+  tags:
+  - Events
+  - Ingestion
+  properties:
+  - type: APIReference
+    url: https://docs.localytics.com/dev/events-api.html
+  - type: JSONSchema
+    url: json-schema/localytics-events-api-v1-schema.json
+- aid: localytics:localytics-export-apis
+  name: Localytics Export APIs
+  description: >-
+    Bulk export of audiences, profiles and raw analytics logs. Requests return a 302 redirect to a
+    generated export file; audiences must be enabled for export in the dashboard first. No
+    machine-readable specification is published.
+  humanURL: https://docs.localytics.com/dev/export-apis.html
+  baseURL: https://api.localytics.com/v1/exports
+  tags:
+  - Data Export
+  - Audiences
+  - Profiles
+  properties:
+  - type: APIReference
+    url: https://docs.localytics.com/dev/export-apis.html
+- aid: localytics:localytics-import-apis
+  name: Localytics Import APIs
+  description: >-
+    Bulk import of user profiles and audience lists built in external systems (CRM, marketing
+    cloud) into Localytics for targeting and campaign use, with an asynchronous status endpoint per
+    import job. No machine-readable specification is published.
+  humanURL: https://docs.localytics.com/dev/import-apis.html
+  baseURL: https://api.localytics.com/v1/imports
+  tags:
+  - Data Import
+  - Audiences
+  - Profiles
+  properties:
+  - type: APIReference
+    url: https://docs.localytics.com/dev/import-apis.html
+- aid: localytics:localytics-places-api
+  name: Localytics Places API
+  description: >-
+    Point-of-interest sync for location-triggered messaging — upload and manage the geofence/POI
+    set an app monitors. Rate limited to 20 requests per hour and 50 per day per app. No
+    machine-readable specification is published.
+  humanURL: https://docs.localytics.com/dev/places-api.html
+  baseURL: https://api.localytics.com/v1/places
+  tags:
+  - Places
+  - Geolocation
+  properties:
+  - type: APIReference
+    url: https://docs.localytics.com/dev/places-api.html
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -137,8 +260,34 @@ common:
   url: security/localytics-domain-security.yml
 - type: Website
   url: https://www.localytics.com/
+- type: OpenAPI
+  url: openapi/_original/localytics-transactional-push-openapi.json
+- type: Overlay
+  url: overlays/localytics-transactional-push-overlay.yaml
+- type: Protobuf
+  url: grpc/localytics-push.proto
+- type: JSONSchema
+  url: json-schema/localytics-events-api-v1-schema.json
+- type: ToolCrosswalk
+  url: mcp/localytics-tool-crosswalk.yml
+- type: ChangeLog
+  url: changelog/localytics-changelog.yml
+- type: Sandbox
+  url: sandbox/localytics-sandbox.yml
+- type: Plans
+  url: plans/localytics-plans-pricing.yml
+- type: StatusPage
+  url: https://status.localytics.com/
+- type: VulnerabilityDisclosure
+  url: security/localytics-vulnerability-disclosure.yml
+- type: Security
+  url: https://www.localytics.com/security
+- type: GitHubOrganization
+  url: https://github.com/localytics
+- type: Login
+  url: https://dashboard.localytics.com/login
 x-enrichment:
-  date: '2026-07-20'
+  date: '2026-08-13'
   status: enriched
-  artifacts_added: 18
+  artifacts_added: 10
   pass: local-v1
