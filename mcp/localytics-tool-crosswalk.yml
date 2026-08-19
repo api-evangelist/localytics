@@ -1,0 +1,148 @@
+generated: '2026-08-13'
+method: derived
+source: mcp/localytics-mcp.yml
+note: >-
+  Localytics publishes NO MCP server. This crosswalk binds the candidate tool set derived in
+  mcp/localytics-mcp.yml to the operations that actually back it, across the three contract
+  surfaces Localytics does publish — the Campaigns & Audience OpenAPI, the Transactional Push
+  OpenAPI, and the gRPC PushService proto. Its purpose here is to record where those surfaces
+  diverge, not to claim an agent surface exists. Every operation named below was verified present
+  in the referenced artifact.
+surfaces:
+  openapi:
+    - file: openapi/_original/localytics-campaigns-audiences-openapi.yml
+      title: Localytics Campaigns And Audience API
+      version: 1.1.2
+      server: https://dashboard.localytics.com/api/v6
+      operations: 13
+      operation_ids: true
+    - file: openapi/_original/localytics-transactional-push-openapi.json
+      title: Localytics Transactional Push API
+      version: 2.0.0
+      server: https://messaging.localytics.com
+      operations: 5
+      operation_ids: false
+      note: >-
+        Published live at https://messaging.localytics.com/swagger.json. Declares no operationIds,
+        so its operations can only be addressed by method+path — the single biggest obstacle to
+        binding a tool to this surface.
+  grpc:
+    file: grpc/localytics-push.proto
+    service: push.PushService
+    methods: [StreamPush]
+    endpoint: 'trans-api-grpc.sandbox53.localytics.com:50051 (sandbox only)'
+    note: Bidirectional streaming; not expressible as a single request/response tool.
+  graphql: null
+  mcp:
+    published: false
+    server: null
+    tools_list_probed: false
+    note: No hosted or stdio MCP server is published by Localytics; the tool list is a candidate.
+crosswalk:
+  - tool: CreatePushCampaign
+    category: campaigns
+    rest: [CreatePushCampaign]
+    binding: rest
+    confidence: high
+  - tool: GetPushCampaign
+    category: campaigns
+    rest: [GetPushCampaign]
+    binding: rest
+    confidence: high
+  - tool: DeletePushCampaign
+    category: campaigns
+    rest: [DeletePushCampaign]
+    binding: rest
+    confidence: high
+  - tool: editPushCampaign
+    category: campaigns
+    rest: [editPushCampaign]
+    binding: rest
+    confidence: high
+  - tool: ArchivePushCampaign
+    category: campaigns
+    rest: [ArchivePushCampaign]
+    binding: rest
+    confidence: high
+  - tool: ListCampaigns
+    category: campaigns
+    rest: [ListCampaigns]
+    binding: rest
+    confidence: high
+  - tool: SearchCampaigns
+    category: campaigns
+    rest: [SearchCampaigns]
+    binding: rest
+    confidence: high
+  - tool: createAudiences
+    category: audiences
+    rest: [createAudiences]
+    binding: rest
+    confidence: high
+  - tool: ListAudiences
+    category: audiences
+    rest: [ListAudiences]
+    binding: rest
+    confidence: high
+  - tool: editAudiences
+    category: audiences
+    rest: [editAudiences]
+    binding: rest
+    confidence: high
+  - tool: DeleteAudience
+    category: audiences
+    rest: [DeleteAudience]
+    binding: rest
+    confidence: high
+  - tool: AudienceSegmentation
+    category: audiences
+    rest: [AudienceSegmentation]
+    binding: rest
+    confidence: high
+  - tool: GetAudienceSegmentationCount
+    category: audiences
+    rest: [GetAudienceSegmentationCount]
+    binding: rest
+    confidence: high
+rest_only:
+  - surface: Transactional Push API
+    file: openapi/_original/localytics-transactional-push-openapi.json
+    operations:
+      - { method: POST, path: '/v2/push/{app_id}', summary: Submit a transactional push batch }
+      - { method: GET, path: /, summary: Health check }
+      - { method: POST, path: /v1/test, summary: Liveness ping }
+      - { method: GET, path: /swagger.json, summary: This OpenAPI document }
+      - { method: GET, path: /docs, summary: Interactive Swagger UI documentation }
+    reason: >-
+      Not represented in the candidate tool set, which was derived only from the Campaigns &
+      Audience spec before the Transactional Push spec was discovered. The push-send operation is
+      the highest-value unbound operation in the catalog for this provider.
+  - surface: Documented but unspecified REST APIs
+    operations:
+      - { api: Query / Reporting, base: 'https://api.localytics.com/v1', docs: 'https://docs.localytics.com/dev/query-api.html' }
+      - { api: Profile, base: 'https://profile.localytics.com/v1', docs: 'https://docs.localytics.com/dev/profile-api.html' }
+      - { api: Events, base: 'https://analytics.localytics.com/events/v1', docs: 'https://docs.localytics.com/dev/events-api.html' }
+      - { api: Audience/Profile/Log Exports, base: 'https://api.localytics.com/v1/exports', docs: 'https://docs.localytics.com/dev/export-apis.html' }
+      - { api: Profile/Audience Imports, base: 'https://api.localytics.com/v1/imports', docs: 'https://docs.localytics.com/dev/import-apis.html' }
+      - { api: Places, base: 'https://api.localytics.com/v1/places', docs: 'https://docs.localytics.com/dev/places-api.html' }
+    reason: >-
+      Fully documented in prose with real base URLs, but no machine-readable contract is published
+      for any of them, so no tool can inherit a real inputSchema. This is the dominant coverage gap
+      for Localytics — six live REST surfaces with no spec.
+grpc_only:
+  - method: push.PushService/StreamPush
+    reason: >-
+      Bidirectional streaming RPC. It has no REST equivalent with the same semantics (the REST
+      /v2/push/{app_id} endpoint is a single batch submit, not a stream) and cannot be modelled as
+      a request/response MCP tool.
+mcp_only: []
+coverage:
+  tools_named: 13
+  tools_bound: 13
+  tools_unbound: 0
+  mcp_only: 0
+  rest_ops_total_with_spec: 18
+  rest_ops_with_a_tool: 13
+  rest_ops_without_a_tool: 5
+  documented_apis_without_a_spec: 6
+  grpc_methods: 1

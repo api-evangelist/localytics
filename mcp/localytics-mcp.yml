@@ -1,9 +1,16 @@
-generated: '2026-07-20'
+generated: '2026-08-13'
 method: derived
 status: candidate
-source: openapi/localytics-campaigns-audiences-openapi.yml
-note: No official Localytics MCP server found; candidate tool list derived one-per-operation from the
-  Campaigns And Audience OpenAPI.
+source: openapi/_original/localytics-campaigns-audiences-openapi.yml
+note: >-
+  No official Localytics MCP server found — not on the provider's site or docs, not in the npm
+  @modelcontextprotocol scope, not in the github.com/localytics organization (87 public repos
+  reviewed 2026-08-13), and not in any public MCP registry. The tool list below is a CANDIDATE
+  derived one-per-operation from the Campaigns And Audience OpenAPI; nobody ships this server.
+  A second real OpenAPI (Transactional Push, 5 operations) and a gRPC PushService were discovered
+  on 2026-08-13 and are recorded in mcp/localytics-tool-crosswalk.yml as unbound surfaces rather
+  than expanded into invented tools.
+crosswalk: mcp/localytics-tool-crosswalk.yml
 server:
   name: localytics
   transport: http
@@ -49,3 +56,16 @@ tools:
 - name: SearchCampaigns
   description: Search campaigns by keyword
   source_operation: openapi/localytics-campaigns-audiences-openapi.yml#SearchCampaigns
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: searched
+  tools: 13
+  checked: '2026-08-13'
+  source: >-
+    Searched the Localytics site and developer documentation, the github.com/localytics
+    organization, npm, and public MCP registries on 2026-08-13. No remote endpoint and no stdio
+    package exists. mode:none is the honest finding; no endpoint URL is guessed.

@@ -1,20 +1,77 @@
-generated: '2026-07-20'
-method: searched
+generated: '2026-08-13'
+method: probed
 note: >-
-  Probed the /.well-known/ discovery surface on the Localytics website, docs and API hosts.
-  None of the standard discovery documents are published (all 404). Absence is recorded data.
+  Probed the /.well-known/ discovery surface on every Localytics host: the website, the docs host,
+  the dashboard/Campaigns API host, the Query/Reporting API host, the messaging (push) host and
+  the profile host. Localytics serves NO /.well-known/ document anywhere — every standard path
+  returns 404. This file records that absence; no WellKnown or SecurityTxt pointer is wired into
+  apis.yml because there is nothing served to point at. Note that dashboard.localytics.com is a
+  single-page app that answers HTTP 200 with an HTML shell for every unknown path including
+  /.well-known/* — those 200s are NOT documents and are recorded as html-shell misses.
 hosts:
   - host: https://www.localytics.com
     documents:
       - { path: /.well-known/security.txt, status: 404 }
-      - { path: /llms.txt, status: 200, file: ../llms/localytics-llms.txt }
+      - { path: /.well-known/agent-card.json, status: 404 }
+      - { path: /.well-known/agent.json, status: 404 }
+      - { path: /.well-known/openid-configuration, status: 404 }
+      - { path: /.well-known/oauth-authorization-server, status: 404 }
+      - { path: /.well-known/api-catalog, status: 404 }
+      - { path: /.well-known/ai-plugin.json, status: 404 }
+      - { path: /llms.txt, status: 200, file: ../llms/localytics-llms.txt, note: 'provider-published; saved verbatim' }
   - host: https://docs.localytics.com
     documents:
       - { path: /.well-known/security.txt, status: 404 }
+      - { path: /.well-known/agent-card.json, status: 404 }
+      - { path: /.well-known/agent.json, status: 404 }
+      - { path: /.well-known/openid-configuration, status: 404 }
+      - { path: /.well-known/oauth-authorization-server, status: 404 }
+      - { path: /.well-known/api-catalog, status: 404 }
+      - { path: /.well-known/ai-plugin.json, status: 404 }
       - { path: /llms.txt, status: 404 }
   - host: https://api.localytics.com
     documents:
       - { path: /.well-known/security.txt, status: 404 }
+      - { path: /.well-known/agent-card.json, status: 404 }
+      - { path: /.well-known/agent.json, status: 404 }
       - { path: /.well-known/openid-configuration, status: 404 }
       - { path: /.well-known/oauth-authorization-server, status: 404 }
       - { path: /.well-known/api-catalog, status: 404 }
+      - { path: /.well-known/ai-plugin.json, status: 404 }
+      - { path: /swagger.json, status: 404 }
+      - { path: /openapi.json, status: 404 }
+      - { path: /v1, status: 200, note: 'HAL+JSON service root — application/vnd.localytics.v1+hal+json with _links; hypermedia, not a spec' }
+  - host: https://messaging.localytics.com
+    documents:
+      - { path: /.well-known/security.txt, status: 404 }
+      - { path: /.well-known/agent-card.json, status: 404 }
+      - { path: /.well-known/agent.json, status: 404 }
+      - { path: /.well-known/openid-configuration, status: 404 }
+      - { path: /.well-known/oauth-authorization-server, status: 404 }
+      - { path: /.well-known/api-catalog, status: 404 }
+      - { path: /.well-known/ai-plugin.json, status: 404 }
+      - { path: /swagger.json, status: 200, note: 'REAL OpenAPI 3.0.3 — saved to openapi/_original/localytics-transactional-push-openapi.json' }
+      - { path: /docs, status: 200, note: 'Swagger UI for the above' }
+  - host: https://profile.localytics.com
+    documents:
+      - { path: /.well-known/security.txt, status: 404 }
+      - { path: /.well-known/agent-card.json, status: 404 }
+      - { path: /.well-known/agent.json, status: 404 }
+      - { path: /swagger.json, status: 404 }
+      - { path: /openapi.json, status: 404 }
+  - host: https://dashboard.localytics.com
+    spa_catch_all: true
+    documents:
+      - { path: /.well-known/agent-card.json, status: 200, result: miss, note: 'HTML SPA shell, not a document' }
+      - { path: /.well-known/agent.json, status: 200, result: miss, note: 'HTML SPA shell, not a document' }
+      - { path: /openapi.json, status: 200, result: miss, note: 'HTML SPA shell, not a document' }
+      - { path: /swagger.json, status: 200, result: miss, note: 'HTML SPA shell, not a document' }
+      - { path: /api-docs, status: 200, result: miss, note: 'HTML SPA shell, not a document' }
+      - { path: /redoc, status: 200, result: miss, note: 'HTML SPA shell, not a document' }
+summary:
+  well_known_documents_served: 0
+  security_txt: false
+  agent_card: false
+  oauth_metadata: false
+  api_catalog: false
+checked: '2026-08-13'

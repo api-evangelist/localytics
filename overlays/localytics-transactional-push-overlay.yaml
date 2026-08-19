@@ -1,0 +1,53 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Localytics Transactional Push API
+  version: 1.0.0
+extends: openapi/_original/localytics-transactional-push-openapi.json
+x-generated: '2026-08-13'
+x-method: generated
+x-source: https://messaging.localytics.com/swagger.json
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-enriched: '2026-08-13'
+      x-apievangelist-discovered: >-
+        Harvested from the API host root at https://messaging.localytics.com/swagger.json on
+        2026-08-13. It is not linked from the Localytics developer documentation, which describes
+        this endpoint in prose only.
+      x-apievangelist-auth: HTTP Basic — Push API key/secret (distinct from the org-level API key/secret)
+      x-apievangelist-idempotency: >-
+        request_id body field, max 255 chars, 24-hour de-duplication window at app_id + customer_id
+        level; duplicate request_id on non-customer_id target types returns 400.
+      x-apievangelist-rate-limit-headers: none published
+  - target: $.servers
+    update:
+      - url: https://messaging.localytics.com
+        description: >-
+          Transactional Push API (production). The published document declares servers[0].url as
+          "/" (relative to the serving host); the absolute host is recorded here because the
+          document is served from messaging.localytics.com and the developer documentation names
+          POST https://messaging.localytics.com/v2/push/<app_id> as the endpoint.
+  - target: $.paths['/v2/push/{app_id}'].post
+    update:
+      x-apievangelist-operation-id-missing: true
+      x-apievangelist-suggested-operation-id: submitPushBatch
+      x-apievangelist-rate-limits:
+        customer_id: 1000/second
+        broadcast: 2/minute
+        profile: 100/10 minutes
+        audience_id: 2/minute
+      x-apievangelist-alternative-transport: >-
+        push.PushService/StreamPush (bidirectional gRPC stream) — see grpc/localytics-push.proto;
+        supports 10,000 messages per stream and per-customer failure reporting this endpoint
+        cannot express.
+  - target: $.paths['/'].get
+    update:
+      x-apievangelist-operation-id-missing: true
+      x-apievangelist-suggested-operation-id: healthCheck
+  - target: $.paths['/v1/test'].post
+    update:
+      x-apievangelist-operation-id-missing: true
+      x-apievangelist-suggested-operation-id: livenessPing
+      x-apievangelist-probe-note: >-
+        Probed 2026-08-13 and returned HTTP 404 "Action not found" on an unauthenticated POST; the
+        spec documents it but the deployed route did not answer.

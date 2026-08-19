@@ -1,0 +1,47 @@
+generated: '2026-08-13'
+method: searched
+source: https://www.localytics.com/
+note: >-
+  Localytics publishes no pricing page and no plan tiers. https://www.localytics.com/pricing
+  returns HTTP 404 and the site navigation carries no pricing entry; every commercial path on the
+  site and docs routes to a demo request or a sales contact. The only prices Localytics publishes
+  anywhere are the Snowflake credit-consumption rates for Direct Access, which are a metering
+  schedule against a separately negotiated quota rather than a purchasable plan.
+plan_count: 0
+pricing_model: enterprise-contact-sales
+evidence:
+  - { url: 'https://www.localytics.com/pricing', status: 404, checked: '2026-08-13' }
+  - { url: 'https://uplandsoftware.com/localytics/demo-request/', status: 200, note: 'demo request form linked from the docs header' }
+  - { url: 'https://www.localytics.com/free-trial-signup', status: 404, note: 'a "Free Trial" link exists in the docs template but its target is gone' }
+subscription_tiers_referenced_in_docs:
+  note: >-
+    The developer documentation names subscription tiers when explaining API quotas, without ever
+    pricing them. Recorded because they are the only evidence of a tier structure.
+  tiers:
+    - name: Enterprise Analytics
+      quota_effect: 'Maximum of 5 audiences per organization available to the Audience Exports API at a time'
+      source: https://docs.localytics.com/dev/export-apis.html
+    - name: Enterprise Marketing
+      quota_effect: 'Maximum of 5 audiences per organization available to the Audience Exports API at a time'
+      source: https://docs.localytics.com/dev/export-apis.html
+    - name: Enterprise Remarketing
+      quota_effect: 'Maximum of 20 audiences per organization available to the Audience Exports API'
+      source: https://docs.localytics.com/dev/export-apis.html
+metered_products:
+  - name: Direct Access (Hosted)
+    docs: https://docs.localytics.com/dev/directaccess.html
+    unit: Snowflake credit
+    detail: >-
+      Customers purchase (or are granted) a quantity of warehouse hours at a warehouse size; the
+      monthly quota is expressed in credits. A medium warehouse consumes 4 credits per hour
+      (0.067 credits per minute), so 40 purchased hours is a 160-credit monthly quota. Warehouses
+      bill by the minute with a 1-minute minimum, auto-suspend after 10 minutes of inactivity, and
+      every query keeps the warehouse up for a minimum of 10 minutes.
+    price_per_credit: null
+    price_note: The credit consumption rate is published; the currency price of a credit is not.
+  - name: Direct Access (Customer Hosted)
+    docs: https://docs.localytics.com/dev/directaccess.html
+    detail: >-
+      Customers with their own Snowflake account may request access to their data inside that
+      account, in which case compute is billed by Snowflake and not by Localytics.
+plans: []

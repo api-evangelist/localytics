@@ -1,0 +1,539 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Localytics Transactional Push API",
+    "version": "2.0.0",
+    "description": "Programmatic push messaging delivery. Submit a batch of pushes for an application; messages are forwarded to push-segmenter (for audience/profile/broadcast targeting) or message-delivery (for customer_id targeting).\n\n## Per-message labels (all target types)\n\nEach entry in `messages` may carry its own labels (same `label1`..`label10`, string-valued rules as the top-level `labels`). Per-message labels are **merged with** the top-level `labels`, and per-message keys **win on conflict**.\n\nTwo equivalent shapes are accepted on each message:\n\n1. **Flat**: `labelN` fields directly on the message — `{ \"target\": \"u1\", \"alert\": \"...\", \"label1\": \"rec-1\" }`\n2. **Nested**: a `labels` object on the message — `{ \"target\": \"u1\", \"alert\": \"...\", \"labels\": { \"label1\": \"rec-1\" } }`\n\nA single message may use one shape or the other, but **not both** — mixing returns HTTP 400.\n\nFor `target_type: customer_id` this lets a caller bundle many distinct pushes into a single API call while still tagging each push with its own unique identifier (for example, an AI-generated request id), which is useful for time-window deliveries where the per-call rate limit would otherwise be a blocker. For `audience_id`, `profile`, and `broadcast` (which only allow a single message per batch) the per-message shape simply provides another spot to attach labels alongside the top-level `labels`.\n\nNote: `audience_id`, `profile`, and `broadcast` still allow only one message per batch — the per-message labels feature does not change that constraint."
+  },
+  "servers": [
+    { "url": "/", "description": "This service" }
+  ],
+  "tags": [
+    { "name": "push", "description": "Transactional push send endpoints" },
+    { "name": "meta", "description": "Health and documentation endpoints" }
+  ],
+  "security": [
+    { "basicAuth": [] }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": ["meta"],
+        "summary": "Health check",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Service is up",
+            "content": {
+              "application/json": {
+                "schema": { "type": "object", "properties": { "ok": { "type": "boolean" } } }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/test": {
+      "post": {
+        "tags": ["meta"],
+        "summary": "Liveness ping",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "pong",
+            "content": { "text/plain": { "schema": { "type": "string", "example": "pong" } } }
+          }
+        }
+      }
+    },
+    "/v2/push/{app_id}": {
+      "post": {
+        "tags": ["push"],
+        "summary": "Submit a transactional push batch",
+        "description": "Queues one or more push messages for delivery. The shape of `messages[*].target` depends on `target_type`.\n\n- `customer_id`: `target` is a customer id string or array of customer id strings. `messages` may contain many entries, each optionally carrying its own `labels` object.\n- `audience_id`: `target` is an integer audience id. `messages` must have exactly one entry.\n- `profile`: `target` is a profile object. `messages` must have exactly one entry.\n- `broadcast`: `target` is omitted or null. `messages` must have exactly one entry.",
+        "parameters": [
+          {
+            "name": "app_id",
+            "in": "path",
+            "required": true,
+            "description": "The Localytics application UUID.",
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/BatchRequest" },
+              "examples": {
+                "customerId_singleMessage_topLevelLabels": {
+                  "summary": "Single customer_id push with top-level labels",
+                  "value": {
+                    "request_id": "1234-1234-1234-1234",
+                    "target_type": "customer_id",
+                    "labels": { "label1": "request-id-1234" },
+                    "messages": [
+                      {
+                        "target": "user123",
+                        "alert": "Tickets for [Artist Name] at [Venue] are selling fast. Don't miss your chance - grab yours before they're gone!"
+                      }
+                    ]
+                  }
+                },
+                "customerId_multipleMessages_perMessageLabels": {
+                  "summary": "Multiple customer_id pushes in one call, each with its own labels",
+                  "value": {
+                    "request_id": "1234-1234-1234-1234",
+                    "target_type": "customer_id",
+                    "messages": [
+                      {
+                        "target": "user123",
+                        "alert": "Tickets for [Artist Name] at [Venue] are selling fast. Don't miss your chance - grab yours before they're gone!",
+                        "labels": { "label1": "request-id-1234" }
+                      },
+                      {
+                        "target": "user456",
+                        "alert": "Different text is here!",
+                        "labels": { "label1": "request-id-0987-different-label-here" }
+                      }
+                    ]
+                  }
+                },
+                "customerId_mixedLabels": {
+                  "summary": "Shared top-level labels merged with unique per-message label1",
+                  "value": {
+                    "request_id": "abc-123",
+                    "target_type": "customer_id",
+                    "labels": { "label2": "presale_event_2026" },
+                    "messages": [
+                      {
+                        "target": "user123",
+                        "alert": "msg 1",
+                        "labels": { "label1": "rec-id-1" }
+                      },
+                      {
+                        "target": "user456",
+                        "alert": "msg 2",
+                        "labels": { "label1": "rec-id-2" }
+                      }
+                    ]
+                  }
+                },
+                "customerId_flatPerMessageLabels": {
+                  "summary": "Per-message labels in the flat shape (labelN directly on each message), mixed with top-level labels",
+                  "value": {
+                    "request_id": "1234-1234-1234-1234",
+                    "target_type": "customer_id",
+                    "labels": {
+                      "label1": "batch-1234",
+                      "label5": "spdata_99999"
+                    },
+                    "messages": [
+                      {
+                        "target": "user123",
+                        "alert": "Tickets for [Artist Name] at [Venue] are selling fast.",
+                        "label2": "vip-tier",
+                        "label3": "campaign-spring-2026"
+                      },
+                      {
+                        "target": ["user456", "user789"],
+                        "alert": {
+                          "title": "Last chance!",
+                          "body": "Only a few seats left."
+                        },
+                        "ios": {
+                          "sound": "default",
+                          "badge": 1,
+                          "content_available": true
+                        },
+                        "android": { "priority": "high" },
+                        "label1": "message-override-0987",
+                        "label4": "fan-club"
+                      }
+                    ]
+                  }
+                },
+                "customerId_mixedShapes_BAD": {
+                  "summary": "REJECTED with HTTP 400: same message cannot mix nested 'labels' and flat 'labelN'",
+                  "value": {
+                    "target_type": "customer_id",
+                    "messages": [
+                      {
+                        "target": "user1",
+                        "alert": "boom",
+                        "labels": { "label1": "nested" },
+                        "label2": "flat"
+                      }
+                    ]
+                  }
+                },
+                "audienceId": {
+                  "summary": "Audience-id push",
+                  "value": {
+                    "request_id": "abc",
+                    "target_type": "audience_id",
+                    "campaign_key": "my_campaign",
+                    "messages": [
+                      { "target": 12345, "alert": "Hello, audience!" }
+                    ]
+                  }
+                },
+                "audienceId_flatPerMessageLabel": {
+                  "summary": "Audience-id push with a flat per-message label",
+                  "value": {
+                    "request_id": "audience-batch-1",
+                    "target_type": "audience_id",
+                    "messages": [
+                      {
+                        "target": 9876,
+                        "alert": "Hi audience",
+                        "label1": "livenation-audience-9876"
+                      }
+                    ]
+                  }
+                },
+                "broadcast": {
+                  "summary": "Broadcast push",
+                  "value": {
+                    "request_id": "abc",
+                    "target_type": "broadcast",
+                    "campaign_key": "ny-broadcast",
+                    "messages": [
+                      { "alert": "Hello, everyone!" }
+                    ]
+                  }
+                },
+                "broadcast_flatPerMessageLabel": {
+                  "summary": "Broadcast push with a flat per-message label",
+                  "value": {
+                    "target_type": "broadcast",
+                    "messages": [
+                      {
+                        "alert": "Broadcast to everyone",
+                        "label1": "marketing-campaign-12"
+                      }
+                    ]
+                  }
+                },
+                "profile_flatPerMessageLabel": {
+                  "summary": "Profile push with a flat per-message label",
+                  "value": {
+                    "target_type": "profile",
+                    "messages": [
+                      {
+                        "target": {
+                          "profile": {
+                            "criteria": [
+                              { "key": "cats", "scope": "Organization", "type": "string", "op": "in", "values": ["Simba", "Ofelia"] }
+                            ],
+                            "op": "and"
+                          }
+                        },
+                        "alert": "Hi cat people",
+                        "label1": "cat-people-segment"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Batch accepted and queued for delivery",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "message": { "type": "string", "example": "Queued for delivery" } }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request (bad JSON, invalid labels, duplicate request_id, campaign key creation limit, etc.)",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } }
+          },
+          "401": {
+            "description": "Missing or invalid API credentials",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } }
+          },
+          "403": {
+            "description": "Authenticated caller is not authorized for this app_id / audience_id, or app_id is misconfigured",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } }
+          },
+          "422": {
+            "description": "Unable to process entity (JSON cannot be parsed at all)",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } }
+          },
+          "429": {
+            "description": "Rate exceeded for the requested target_type",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } }
+          }
+        }
+      }
+    },
+    "/swagger.json": {
+      "get": {
+        "tags": ["meta"],
+        "summary": "This OpenAPI document",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "OpenAPI 3.0 JSON document",
+            "content": { "application/json": {} }
+          }
+        }
+      }
+    },
+    "/docs": {
+      "get": {
+        "tags": ["meta"],
+        "summary": "Interactive Swagger UI documentation",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "HTML page rendering Swagger UI against /swagger.json",
+            "content": { "text/html": {} }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "basicAuth": {
+        "type": "http",
+        "scheme": "basic",
+        "description": "HTTP Basic with `api_key:api_secret`."
+      }
+    },
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": { "type": "string" }
+        }
+      },
+      "Labels": {
+        "type": "object",
+        "description": "Labels object. Keys must be of the form `label1`..`label10`; values must be strings.",
+        "additionalProperties": { "type": "string" },
+        "maxProperties": 10,
+        "example": { "label1": "campaign-id-42", "label2": "presale_event_2026" }
+      },
+      "Alert": {
+        "description": "Either a plain string alert or a structured alert.",
+        "oneOf": [
+          { "type": "string", "example": "Tickets are on sale now!" },
+          {
+            "type": "object",
+            "properties": {
+              "body":     { "type": "string" },
+              "title":    { "type": "string" },
+              "subtitle": { "type": "string" }
+            },
+            "required": ["body"],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "IosParams": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "sound":             { "type": "string" },
+          "badge":             { "type": "integer" },
+          "category":          { "type": "string" },
+          "extra":             { "type": "object", "additionalProperties": true },
+          "content_available": { "type": "boolean" },
+          "mutable_content":   { "type": "boolean" }
+        }
+      },
+      "AndroidParams": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "extra":    { "type": "object", "additionalProperties": true },
+          "priority": { "type": "string", "example": "high" }
+        }
+      },
+      "WebParams": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "badge":              { "type": "string" },
+          "dir":                { "type": "string" },
+          "extra":              { "type": "object", "additionalProperties": true },
+          "icon":               { "type": "string" },
+          "renotify":           { "type": "boolean" },
+          "requireInteraction": { "type": "boolean" },
+          "silent":             { "type": "boolean" },
+          "tag":                { "type": "string" }
+        }
+      },
+      "MessageCustomerId": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["target"],
+        "description": "Per-message labels can be supplied EITHER as the nested `labels` object OR as flat `label1`..`label10` fields directly on this object. Mixing both shapes in the same message returns HTTP 400.",
+        "properties": {
+          "target": {
+            "description": "A customer id string or an array of customer id strings.",
+            "oneOf": [
+              { "type": "string" },
+              { "type": "array", "items": { "type": "string" } }
+            ]
+          },
+          "alert":   { "$ref": "#/components/schemas/Alert" },
+          "ios":     { "$ref": "#/components/schemas/IosParams" },
+          "android": { "$ref": "#/components/schemas/AndroidParams" },
+          "web":     { "$ref": "#/components/schemas/WebParams" },
+          "labels": {
+            "allOf": [{ "$ref": "#/components/schemas/Labels" }],
+            "description": "Optional labels scoped to THIS message (nested shape). Merged with the top-level `labels`; per-message keys take precedence on conflict. Customer-id only."
+          },
+          "label1":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label2":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label3":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label4":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label5":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label6":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label7":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label8":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label9":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label10": { "type": "string", "description": "Optional flat-shape per-message label." }
+        }
+      },
+      "MessageAudienceId": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["target"],
+        "description": "Per-message labels can be supplied EITHER as the nested `labels` object OR as flat `label1`..`label10` fields directly on this object. Mixing both shapes in the same message returns HTTP 400.",
+        "properties": {
+          "target":  { "type": "integer", "description": "Audience id." },
+          "alert":   { "$ref": "#/components/schemas/Alert" },
+          "ios":     { "$ref": "#/components/schemas/IosParams" },
+          "android": { "$ref": "#/components/schemas/AndroidParams" },
+          "web":     { "$ref": "#/components/schemas/WebParams" },
+          "labels": {
+            "allOf": [{ "$ref": "#/components/schemas/Labels" }],
+            "description": "Optional labels scoped to THIS message (nested shape). Merged with the top-level `labels`; per-message keys take precedence on conflict."
+          },
+          "label1":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label2":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label3":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label4":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label5":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label6":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label7":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label8":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label9":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label10": { "type": "string", "description": "Optional flat-shape per-message label." }
+        }
+      },
+      "MessageProfile": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["target"],
+        "description": "Per-message labels can be supplied EITHER as the nested `labels` object OR as flat `label1`..`label10` fields directly on this object. Mixing both shapes in the same message returns HTTP 400.",
+        "properties": {
+          "target":  {
+            "type": "object",
+            "description": "Profile-targeting payload (criteria + outer op).",
+            "additionalProperties": true
+          },
+          "alert":   { "$ref": "#/components/schemas/Alert" },
+          "ios":     { "$ref": "#/components/schemas/IosParams" },
+          "android": { "$ref": "#/components/schemas/AndroidParams" },
+          "web":     { "$ref": "#/components/schemas/WebParams" },
+          "labels": {
+            "allOf": [{ "$ref": "#/components/schemas/Labels" }],
+            "description": "Optional labels scoped to THIS message (nested shape). Merged with the top-level `labels`; per-message keys take precedence on conflict."
+          },
+          "label1":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label2":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label3":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label4":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label5":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label6":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label7":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label8":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label9":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label10": { "type": "string", "description": "Optional flat-shape per-message label." }
+        }
+      },
+      "MessageBroadcast": {
+        "type": "object",
+        "additionalProperties": false,
+        "description": "Per-message labels can be supplied EITHER as the nested `labels` object OR as flat `label1`..`label10` fields directly on this object. Mixing both shapes in the same message returns HTTP 400.",
+        "properties": {
+          "target":  { "nullable": true, "description": "Must be omitted or null." },
+          "alert":   { "$ref": "#/components/schemas/Alert" },
+          "ios":     { "$ref": "#/components/schemas/IosParams" },
+          "android": { "$ref": "#/components/schemas/AndroidParams" },
+          "web":     { "$ref": "#/components/schemas/WebParams" },
+          "labels": {
+            "allOf": [{ "$ref": "#/components/schemas/Labels" }],
+            "description": "Optional labels scoped to THIS message (nested shape). Merged with the top-level `labels`; per-message keys take precedence on conflict."
+          },
+          "label1":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label2":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label3":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label4":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label5":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label6":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label7":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label8":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label9":  { "type": "string", "description": "Optional flat-shape per-message label." },
+          "label10": { "type": "string", "description": "Optional flat-shape per-message label." }
+        }
+      },
+      "BatchRequest": {
+        "type": "object",
+        "required": ["target_type", "messages"],
+        "additionalProperties": false,
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Optional caller-supplied id. For non-customer_id target types, duplicate request_ids in a rolling window are rejected with 400."
+          },
+          "campaign_key": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Optional caller-supplied label for the Localytics campaign. No whitespace."
+          },
+          "target_type": {
+            "type": "string",
+            "enum": ["customer_id", "audience_id", "profile", "broadcast"]
+          },
+          "labels": {
+            "allOf": [{ "$ref": "#/components/schemas/Labels" }],
+            "description": "Batch-level labels applied to every message. For customer_id, per-message `labels` override these on key conflicts."
+          },
+          "messages": {
+            "type": "array",
+            "minItems": 1,
+            "description": "Per `target_type`: customer_id allows many entries; audience_id / profile / broadcast must have exactly one.",
+            "items": {
+              "oneOf": [
+                { "$ref": "#/components/schemas/MessageCustomerId" },
+                { "$ref": "#/components/schemas/MessageAudienceId" },
+                { "$ref": "#/components/schemas/MessageProfile" },
+                { "$ref": "#/components/schemas/MessageBroadcast" }
+              ]
+            }
+          },
+          "all_devices": { "type": "boolean" },
+          "test":        { "type": "boolean" }
+        }
+      }
+    }
+  }
+}

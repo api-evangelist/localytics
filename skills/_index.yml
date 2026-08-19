@@ -1,12 +1,23 @@
-generated: '2026-07-20'
+generated: '2026-08-13'
 method: generated
-source: openapi/localytics-campaigns-audiences-openapi.yml
+source: >-
+  openapi/_original/localytics-campaigns-audiences-openapi.yml,
+  openapi/_original/localytics-transactional-push-openapi.json,
+  grpc/localytics-push.proto
+note: >-
+  Packaged agent skills for the Localytics flows that have a machine-readable contract behind
+  them. Every operationId referenced was verified present in the named spec; the Transactional
+  Push API publishes no operationIds, so that skill addresses its operation by method and path.
 skills:
   - file: localytics-create-push-campaign.md
     name: Create and manage a Localytics push campaign
-    api: openapi/localytics-campaigns-audiences-openapi.yml
+    api: openapi/_original/localytics-campaigns-audiences-openapi.yml
     operations: [CreatePushCampaign, GetPushCampaign, editPushCampaign, ArchivePushCampaign, DeletePushCampaign]
   - file: localytics-build-audience.md
     name: Build a Localytics audience and size it
-    api: openapi/localytics-campaigns-audiences-openapi.yml
+    api: openapi/_original/localytics-campaigns-audiences-openapi.yml
     operations: [createAudiences, ListAudiences, AudienceSegmentation, GetAudienceSegmentationCount, editAudiences, DeleteAudience]
+  - file: localytics-send-transactional-push.md
+    name: Send a Localytics transactional push
+    api: openapi/_original/localytics-transactional-push-openapi.json
+    operations: ['POST /v2/push/{app_id}']

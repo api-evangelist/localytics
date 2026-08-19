@@ -1,0 +1,115 @@
+generated: '2026-08-13'
+method: searched
+source: https://docs.localytics.com/dev/sdk-changelog.html
+note: >-
+  Localytics does not publish a single unified API changelog. Instead it publishes (a) a dated
+  per-platform SDK changelog and (b) a "Version History" table at the bottom of each API
+  reference page in the developer documentation. Both are captured here. The Campaigns &
+  Audience API carries its version only in the OpenAPI info.version field (1.1.2); the
+  Transactional Push API carries 2.0.0 in its published swagger.json.
+scheme: per-surface
+docs:
+  sdk_changelog: https://docs.localytics.com/dev/sdk-changelog.html
+  export_apis: https://docs.localytics.com/dev/export-apis.html
+  import_apis: https://docs.localytics.com/dev/import-apis.html
+  events_api: https://docs.localytics.com/dev/events-api.html
+current_versions:
+  - api: Transactional Push API
+    version: 2.0.0
+    source: https://messaging.localytics.com/swagger.json
+  - api: Campaigns & Audience API
+    version: 1.1.2
+    source: openapi/_original/localytics-campaigns-audiences-openapi.yml
+  - api: Query / Reporting API
+    version: v1
+    source: https://api.localytics.com/v1
+  - api: Profile API
+    version: v1
+    source: https://docs.localytics.com/dev/profile-api.html
+  - api: Events API
+    version: '1.0'
+    source: https://docs.localytics.com/dev/events-api.html
+entries:
+  - api: Raw Log Exports
+    version: v1.2
+    date: '2019-03-13'
+    breaking: false
+    additions:
+      - Adds push_status to log exports (Provisional, Disabled, Enabled (Delivered Quietly), Enabled (Prominent))
+  - api: Events API
+    version: '1.0'
+    date: '2019-03-31'
+    breaking: false
+    highlights:
+      - Events API v1 release, adds platform support
+  - api: Raw Log Exports
+    version: v1.1
+    date: '2018-12-03'
+    breaking: false
+    additions:
+      - Adds at_millis (UTC epoch milliseconds) to log exports; requires SDK 5.1+ for millisecond precision
+  - api: Audience Imports
+    version: '1.0'
+    date: '2018-10-12'
+    breaking: false
+    highlights:
+      - General Availability
+  - api: Profile Exports
+    version: '1.0'
+    date: '2017-08-25'
+    breaking: false
+    highlights:
+      - GA release; includes self-serve dashboard
+  - api: Raw Log Exports
+    version: v1
+    date: '2017-08-01'
+    breaking: false
+    highlights:
+      - GA release version
+  - api: Audience Imports
+    version: '0.5'
+    date: '2017-09-10'
+    breaking: false
+    highlights:
+      - Beta release version
+  - api: Audience Exports
+    version: '1.5'
+    date: '2017-05-30'
+    breaking: false
+    additions:
+      - Audience name and size added to the audience list response
+  - api: Profile Imports
+    version: '0.5'
+    date: '2017-05-30'
+    breaking: false
+    highlights:
+      - Beta release version
+  - api: Profile Exports
+    version: '0.5'
+    date: '2017-05-04'
+    breaking: false
+    highlights:
+      - Beta release version
+  - api: Audience Exports
+    version: '1.0'
+    date: '2017-04-06'
+    breaking: true
+    highlights:
+      - GA release; self-serve Dashboard management, audience list request functionality, and a NEW URL STRUCTURE
+  - api: Audience Exports
+    version: '0.5'
+    date: '2017-01-18'
+    breaking: false
+    highlights:
+      - Beta release version
+sdk_changelog:
+  note: >-
+    A dated, per-platform release history is published for iOS, Android, Web, Cordova, Maui,
+    Flutter, React Native, Xamarin, tvOS, Windows RT, Roku and Titanium SDKs. Package-registry
+    release dates for the currently published SDKs are recorded in packages/localytics-packages.yml.
+  url: https://docs.localytics.com/dev/sdk-changelog.html
+  subscribe: https://docs.localytics.com/sdk-signup
+gaps:
+  - No single API changelog / release-notes feed covering all surfaces.
+  - The API version-history tables stop in 2019; the live SDK changelog and package registries
+    are the only currently-updated release signal.

@@ -1,32 +1,165 @@
-generated: '2026-07-20'
-method: derived
-source: https://docs.localytics.com/docs/resources/developer-documentation
+generated: '2026-08-13'
+method: searched
+source: >-
+  Registry metadata endpoints (trunk.cocoapods.org, api.nuget.org, pub.dev, registry.npmjs.org)
+  plus the Localytics developer documentation SDK index and the github.com/localytics organization.
 note: >-
-  First-party SDKs listed in the Localytics developer documentation. Package-registry
-  coordinates (npm/Maven/CocoaPods/NuGet) were not resolved this pass; entries are derived
-  from the docs SDK index and are all first-party Localytics client libraries.
+  First-party Localytics client SDKs, resolved to real registry coordinates with the latest
+  published version and its date. CocoaPods ownership is confirmed first-party
+  (localytics.sdk@uplandsoftware.com — Localytics is an Upland Software product). Two historical
+  npm packages published under the Localytics name are recorded with their real dates because
+  their staleness is the finding: the JavaScript/React Native distribution moved off npm to the
+  docs-hosted Web SDK loader and the localytics-react-native GitHub repo.
 packages:
-  - platform: android
-    name: Localytics Android SDK
-    official: true
-    docs: https://docs.localytics.com/dev/
   - platform: ios
-    name: Localytics iOS SDK
+    language: objective-c
+    registry: cocoapods
+    name: Localytics
+    url: https://cocoapods.org/pods/Localytics
+    install: pod 'Localytics'
     official: true
-    docs: https://docs.localytics.com/dev/
-  - platform: tvos
-    name: Localytics Apple TV SDK
+    version: 7.0.1
+    published: '2026-01-28'
+    owners: [localytics.sdk@uplandsoftware.com]
+  - platform: ios
+    language: swift
+    registry: swiftpm
+    name: Localytics-swiftpm
+    url: https://github.com/localytics/Localytics-swiftpm
+    install: 'Swift Package Manager: https://github.com/localytics/Localytics-swiftpm'
     official: true
-    docs: https://docs.localytics.com/dev/
-  - platform: react-native
-    name: Localytics React Native SDK
+    version: null
+    published: null
+    note: >-
+      Swift Package Manager distribution is served from the GitHub repository, which has no
+      registry metadata endpoint and publishes no tagged releases; consumers resolve a branch or
+      commit. Repository last pushed 2026-07-21.
+  - platform: xamarin
+    language: csharp
+    registry: nuget
+    name: LocalyticsXamarin
+    url: https://www.nuget.org/packages/LocalyticsXamarin
+    install: dotnet add package LocalyticsXamarin
     official: true
-    docs: https://docs.localytics.com/dev/
-  - platform: web
-    name: Localytics Web SDK
+    version: 6.3.2
+    published: '2024-05-27'
+    source_code: https://github.com/localytics/localytics-xamarin
+  - platform: maui
+    language: csharp
+    registry: nuget
+    name: LocalyticsMaui
+    url: https://www.nuget.org/packages/LocalyticsMaui
+    install: dotnet add package LocalyticsMaui
     official: true
-    docs: https://docs.localytics.com/dev/
+    version: 1.2.1
+    published: '2026-07-22'
+    source_code: https://github.com/localytics/localytics-maui
+  - platform: flutter
+    language: dart
+    registry: pub.dev
+    name: localytics_flutter_sdk
+    url: https://pub.dev/packages/localytics_flutter_sdk
+    install: flutter pub add localytics_flutter_sdk
+    official: true
+    version: 1.0.4
+    published: '2026-07-29'
   - platform: windows
-    name: Localytics Windows SDK
+    language: csharp
+    registry: nuget
+    name: Localytics
+    url: https://www.nuget.org/packages/Localytics
+    install: dotnet add package Localytics
     official: true
-    docs: https://docs.localytics.com/dev/
+    version: 3.1.0
+    published: '2015-11-11'
+    note: >-
+      Legacy Windows/.NET SDK. Last published 2015 — more than a decade older than the API surface
+      it wraps; treat as unmaintained.
+  - platform: react-native
+    language: javascript
+    registry: npm
+    name: react-native-localytics
+    url: https://www.npmjs.com/package/react-native-localytics
+    install: npm install react-native-localytics
+    official: false
+    version: 0.4.0
+    published: '2017-01-03'
+    note: >-
+      Not confirmed first-party. The docs point React Native integrators at the platform guide,
+      not this npm package; recorded because it is the only React Native package on npm carrying
+      the name and its 2017 date is the decay signal.
+  - platform: web
+    language: javascript
+    registry: npm
+    name: localytics
+    url: https://www.npmjs.com/package/localytics
+    install: npm install localytics
+    official: false
+    version: 0.0.3
+    published: '2015-11-12'
+    note: >-
+      Not confirmed first-party and abandoned at 0.0.3 (2015). The supported Web SDK is documented
+      at https://docs.localytics.com/dev/web.html, not distributed through this npm package.
+  - platform: android
+    language: java
+    registry: null
+    name: Localytics Android SDK
+    url: https://docs.localytics.com/dev/android.html
+    official: true
+    version: null
+    published: null
+    note: >-
+      No com.localytics.android coordinate is published on Maven Central (a Maven Central search
+      for "localytics" returns only third-party Segment / mParticle integration modules). The
+      Android SDK is distributed from the Localytics documentation; version and date are therefore
+      unavailable from any registry metadata endpoint.
+  - platform: cordova
+    language: javascript
+    registry: null
+    name: localytics-cordova
+    url: https://github.com/localytics/localytics-cordova
+    official: true
+    version: null
+    published: null
+    note: 'GitHub-distributed Cordova plugin; no registry coordinate. Repository last pushed 2019-07-15.'
+  - platform: unity
+    language: csharp
+    registry: null
+    name: localytics-unity
+    url: https://github.com/localytics/localytics-unity
+    official: true
+    version: null
+    published: null
+    note: 'GitHub-distributed Unity package; no registry coordinate. Repository last pushed 2021-05-21.'
+  - platform: titanium
+    language: javascript
+    registry: null
+    name: localytics-titanium
+    url: https://github.com/localytics/localytics-titanium
+    official: true
+    version: null
+    published: null
+    note: 'GitHub-distributed Titanium module; no registry coordinate. Repository last pushed 2018-05-20.'
+  - platform: tvos
+    language: objective-c
+    registry: null
+    name: Localytics Apple TV SDK
+    url: https://docs.localytics.com/dev/tvOS.html
+    official: true
+    version: null
+    published: null
+    note: Documented as a supported platform; no separate registry coordinate found (shipped with the iOS pod).
+samples:
+  - https://github.com/localytics/localytics-ios-sample
+  - https://github.com/localytics/localytics-android-sample
+  - https://github.com/localytics/localytics-flutter-sample
+  - https://github.com/localytics/ll-expo-sample-project
+  - https://github.com/localytics/web-sdk-samples
+  - https://github.com/localytics/ios-samples
+  - https://github.com/localytics/android-samples
+  - https://github.com/localytics/MauiSDKTester
+  - https://github.com/localytics/services-campaigns-api-script
+currency_summary:
+  actively_released: [LocalyticsMaui (2026-07-22), localytics_flutter_sdk (2026-07-29), Localytics CocoaPod (2026-01-28)]
+  stale: [LocalyticsXamarin (2024-05-27), Localytics NuGet (2015-11-11), react-native-localytics (2017-01-03), localytics npm (2015-11-12)]
+  unresolvable: [Android SDK, Cordova, Unity, Titanium, tvOS, SwiftPM]

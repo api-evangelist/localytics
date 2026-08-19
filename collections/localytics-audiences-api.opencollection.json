@@ -1,0 +1,205 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Localytics Campaigns And Audience Audiences API",
+    "version": "1.1.2"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Audiences",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve all audiences for a given app_id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dashboard.localytics.com/api/v6/orgs/:org_id/apps/:app_id/audiences",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The organization id found in your Dashboard containing your app."
+              },
+              {
+                "name": "app_id",
+                "value": "",
+                "type": "path",
+                "description": "The App Key which will receive this message, which can be found under the settings page of your Dashboard."
+              }
+            ]
+          },
+          "docs": "Returns the transformed audience list including profile rules, behavior rules, and segmentation counts."
+        },
+        {
+          "info": {
+            "name": "Create a new audience with the given definition.\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dashboard.localytics.com/api/v6/orgs/:org_id/apps/:app_id/audiences",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The organization id found in your Dashboard containing your app."
+              },
+              {
+                "name": "app_id",
+                "value": "",
+                "type": "path",
+                "description": "The App Key which will receive this message, which can be found under the settings page of your Dashboard."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new audience with the given definition.\n"
+        },
+        {
+          "info": {
+            "name": "Calculate size for a single audience id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dashboard.localytics.com/api/v6/orgs/:org_id/apps/:app_id/audiences/:audience_id/segmentation",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The organization id found in your Dashboard containing your app."
+              },
+              {
+                "name": "app_id",
+                "value": "",
+                "type": "path",
+                "description": "The App Key which will receive this message, which can be found under the settings page of your Dashboard."
+              },
+              {
+                "name": "audience_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Calculate size for a single audience id."
+        },
+        {
+          "info": {
+            "name": "Retrieve a specific audience",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dashboard.localytics.com/api/v6/orgs/:org_id/apps/:app_id/audiences/:audience_id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The organization id found in your Dashboard containing your app."
+              },
+              {
+                "name": "app_id",
+                "value": "",
+                "type": "path",
+                "description": "The App Key which will receive this message, which can be found under the settings page of your Dashboard."
+              },
+              {
+                "name": "audience_id",
+                "value": "",
+                "type": "path",
+                "description": "Audience id"
+              }
+            ]
+          },
+          "docs": "Returns segmentation metrics and the audience's targeting rules for the given audience ID. Includes counts such as total users, users with push tokens, and users seen in the last 30 days.\n"
+        },
+        {
+          "info": {
+            "name": "Edit a existing audience with the given definition or name.\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://dashboard.localytics.com/api/v6/orgs/:org_id/apps/:app_id/audiences/:audience_id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The organization id found in your Dashboard containing your app."
+              },
+              {
+                "name": "app_id",
+                "value": "",
+                "type": "path",
+                "description": "The App Key which will receive this message, which can be found under the settings page of your Dashboard."
+              },
+              {
+                "name": "audience_id",
+                "value": "",
+                "type": "path",
+                "description": "Audience id"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Edit a existing audience with the given definition or name.\n"
+        },
+        {
+          "info": {
+            "name": "Delete the audience.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://dashboard.localytics.com/api/v6/orgs/:org_id/apps/:app_id/audiences/:audience_id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "organization id"
+              },
+              {
+                "name": "app_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "audience_id",
+                "value": "",
+                "type": "path",
+                "description": "Audience id"
+              }
+            ]
+          },
+          "docs": "Delete the audience."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

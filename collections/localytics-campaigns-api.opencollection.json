@@ -1,0 +1,177 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Localytics And Audience Audiences Campaigns API",
+    "version": "1.1.2"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Campaigns",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Fetch campaigns (with filters/sort)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dashboard.localytics.com/api/v6/orgs/:org_id/apps/:app_id/campaigns",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The organization id found in your Dashboard containing your app."
+              },
+              {
+                "name": "app_id",
+                "value": "",
+                "type": "path",
+                "description": "app id value"
+              },
+              {
+                "name": "channel",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated values if multiple channels. Optional filter parameter."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated values if multiple campaign statuses"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Column to sort by"
+              },
+              {
+                "name": "sort_order",
+                "value": "",
+                "type": "query",
+                "description": "Order of sorting"
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "Number of records per API call (100 by default)"
+              },
+              {
+                "name": "recurring",
+                "value": "",
+                "type": "query",
+                "description": "0: none and both, 1: recurring, 2: only one-time, 3: either recurring OR one-time"
+              },
+              {
+                "name": "is_archived",
+                "value": "",
+                "type": "query",
+                "description": "0: unarchived, 1: archived"
+              },
+              {
+                "name": "page_number",
+                "value": "",
+                "type": "query",
+                "description": "Page number for pagination"
+              }
+            ]
+          },
+          "docs": "Returns a list of campaigns filtered by the given query parameters"
+        },
+        {
+          "info": {
+            "name": "Search campaigns by keyword",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dashboard.localytics.com/api/v6/orgs/:org_id/apps/:app_id/campaigns/search",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The organization id found in your Dashboard containing your app."
+              },
+              {
+                "name": "app_id",
+                "value": "",
+                "type": "path",
+                "description": "app id value"
+              },
+              {
+                "name": "key",
+                "value": "",
+                "type": "query",
+                "description": "Key to search by name or campaign ID"
+              },
+              {
+                "name": "channel",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated values if multiple channels. Optional filter parameter."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated values if multiple campaign statuses"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Column to sort by"
+              },
+              {
+                "name": "sort_order",
+                "value": "",
+                "type": "query",
+                "description": "Order of sorting"
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "Number of records per API call (100 by default)"
+              },
+              {
+                "name": "recurring",
+                "value": "",
+                "type": "query",
+                "description": "0: none and both, 1: recurring, 2: only one-time, 3: either recurring OR one-time"
+              },
+              {
+                "name": "is_archived",
+                "value": "",
+                "type": "query",
+                "description": "0: unarchived, 1: archived"
+              },
+              {
+                "name": "page_number",
+                "value": "",
+                "type": "query",
+                "description": "Page number for pagination"
+              }
+            ]
+          },
+          "docs": "Fetches campaigns by name or ID using a required key param"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

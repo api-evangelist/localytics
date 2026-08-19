@@ -1,0 +1,1538 @@
+{
+  "item": [
+    {
+      "id": "fb115289-c0dc-457a-a9bb-d1feb57cd124",
+      "name": "Push Campaigns",
+      "description": {
+        "content": "Requests relating to push-channel campaigns",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "deab08ec-e593-41ea-b59c-a353be6e9180",
+          "name": "Create a new push campaign with the given parameters. Note that campaigns with `active` status will be sent to end users upon the configured schedule with no further confirmation.\n",
+          "request": {
+            "name": "Create a new push campaign with the given parameters. Note that campaigns with `active` status will be sent to end users upon the configured schedule with no further confirmation.\n",
+            "description": {},
+            "url": {
+              "path": [
+                "orgs",
+                ":org_id",
+                "apps",
+                ":app_id",
+                "push",
+                "campaigns"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "org_id",
+                  "description": "(Required) The organization id found in your Dashboard containing your app."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "app_id",
+                  "description": "(Required) The App Key which will receive this message, which can be found under the settings page of your Dashboard."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"status\": \"<string>\",\n  \"goal\": \"<string>\",\n  \"audiences\": {\n    \"campaign_type\": \"<string>\"\n  },\n  \"schedule\": {},\n  \"creatives\": \"<object>\",\n  \"conversion_event\": {\n    \"event_name\": \"<string>\",\n    \"conversion_attributes\": {\n      \"filters\": [\n        {\n          \"dimension_name\": \"<string>\",\n          \"operator\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        {\n          \"dimension_name\": \"<string>\",\n          \"operator\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      ],\n      \"operator\": \"<string>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "cf017574-e5d0-4d1a-bba1-c9107aa55387",
+              "name": "Successfully created the push campaign with given attribute values.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "apps",
+                    ":app_id",
+                    "push",
+                    "campaigns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "org_id",
+                      "description": "(Required) The organization id found in your Dashboard containing your app."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "app_id",
+                      "description": "(Required) The App Key which will receive this message, which can be found under the settings page of your Dashboard."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"status\": \"<string>\",\n  \"goal\": \"<string>\",\n  \"audiences\": {\n    \"campaign_type\": \"<string>\"\n  },\n  \"schedule\": {},\n  \"creatives\": \"<object>\",\n  \"conversion_event\": {\n    \"event_name\": \"<string>\",\n    \"conversion_attributes\": {\n      \"filters\": [\n        {\n          \"dimension_name\": \"App Version\",\n          \"operator\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        {\n          \"dimension_name\": \"App Version\",\n          \"operator\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      ],\n      \"operator\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"<string>\",\n  \"status\": \"<string>\",\n  \"goal\": \"<string>\",\n  \"audiences\": {\n    \"campaign_type\": \"<string>\"\n  },\n  \"schedule\": {},\n  \"creatives\": \"<object>\",\n  \"id\": 5539,\n  \"conversion_event\": {\n    \"event_name\": \"<string>\",\n    \"conversion_attributes\": {\n      \"filters\": [\n        {\n          \"dimension_name\": \"App Version\",\n          \"operator\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        {\n          \"dimension_name\": \"App Version\",\n          \"operator\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      ],\n      \"operator\": \"<string>\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b114c807-ce81-4a4e-aca7-eabbf28519a4",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "apps",
+                    ":app_id",
+                    "push",
+                    "campaigns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "org_id",
+                      "description": "(Required) The organization id found in your Dashboard containing your app."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "app_id",
+                      "description": "(Required) The App Key which will receive this message, which can be found under the settings page of your Dashboard."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"status\": \"<string>\",\n  \"goal\": \"<string>\",\n  \"audiences\": {\n    \"campaign_type\": \"<string>\"\n  },\n  \"schedule\": {},\n  \"creatives\": \"<object>\",\n  \"conversion_event\": {\n    \"event_name\": \"<string>\",\n    \"conversion_attributes\": {\n      \"filters\": [\n        {\n          \"dimension_name\": \"App Version\",\n          \"operator\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        {\n          \"dimension_name\": \"App Version\",\n          \"operator\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      ],\n      \"operator\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "00bd7d7c-031d-489f-b9db-64dae42d8a82",
+              "name": "Invalid input parameters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "apps",
+                    ":app_id",
+                    "push",
+                    "campaigns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "org_id",
+                      "description": "(Required) The organization id found in your Dashboard containing your app."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "app_id",
+                      "description": "(Required) The App Key which will receive this message, which can be found under the settings page of your Dashboard."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"status\": \"<string>\",\n  \"goal\": \"<string>\",\n  \"audiences\": {\n    \"campaign_type\": \"<string>\"\n  },\n  \"schedule\": {},\n  \"creatives\": \"<object>\",\n  \"conversion_event\": {\n    \"event_name\": \"<string>\",\n    \"conversion_attributes\": {\n      \"filters\": [\n        {\n          \"dimension_name\": \"App Version\",\n          \"operator\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        {\n          \"dimension_name\": \"App Version\",\n          \"operator\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      ],\n      \"operator\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b8764848-3312-4df3-a34d-168fe74d174a",
+          "name": "Get the push campaign's audience, creatives, schedule details.",
+          "request": {
+            "name": "Get the push campaign's audience, creatives, schedule details.",
+            "description": {},
+            "url": {
+              "path": [
+                "orgs",
+                ":org_id",
+                "apps",
+                ":app_id",
+                "push",
+                "campaigns",
+                ":campaign_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "org_id",
+                  "description": "(Required) organization id"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "app_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "campaign_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "86fcfc19-3c05-4f43-b8d6-0acbe7805ed5",
+              "name": "Successfully retrieved the campaign details.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "apps",
+                    ":app_id",
+                    "push",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "org_id",
+                      "description": "(Required) organization id"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "app_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"<string>\",\n  \"status\": \"<string>\",\n  \"goal\": \"<string>\",\n  \"audiences\": {\n    \"campaign_type\": \"<string>\"\n  },\n  \"schedule\": {},\n  \"creatives\": \"<object>\",\n  \"id\": 5539,\n  \"conversion_event\": {\n    \"event_name\": \"<string>\",\n    \"conversion_attributes\": {\n      \"filters\": [\n        {\n          \"dimension_name\": \"App Version\",\n          \"operator\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        {\n          \"dimension_name\": \"App Version\",\n          \"operator\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      ],\n      \"operator\": \"<string>\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c479ece1-a1c6-4459-89a7-641c530bd506",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "apps",
+                    ":app_id",
+                    "push",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "org_id",
+                      "description": "(Required) organization id"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "app_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "bfe20b45-e96f-481b-90ab-362b57d8a8ff",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "apps",
+                    ":app_id",
+                    "push",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "org_id",
+                      "description": "(Required) organization id"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "app_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2c2fe871-c190-43e4-a7e1-02e0f48a1df2",
+          "name": "Delete the push campaign.",
+          "request": {
+            "name": "Delete the push campaign.",
+            "description": {},
+            "url": {
+              "path": [
+                "orgs",
+                ":org_id",
+                "apps",
+                ":app_id",
+                "push",
+                "campaigns",
+                ":campaign_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "org_id",
+                  "description": "(Required) organization id"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "app_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "campaign_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "102c5f52-ebf9-4001-8c38-baaccffe20c6",
+              "name": "Successfully deleted the given push campaign.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "apps",
+                    ":app_id",
+                    "push",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "org_id",
+                      "description": "(Required) organization id"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "app_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "39ef2fca-e435-483c-b980-69e434d2dc10",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "apps",
+                    ":app_id",
+                    "push",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "org_id",
+                      "description": "(Required) organization id"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "app_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4486a86b-94a4-4311-ba26-07431f44ea49",
+              "name": "Campaign cannot be deleted. It may be active or have jobs running.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "apps",
+                    ":app_id",
+                    "push",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "org_id",
+                      "description": "(Required) organization id"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "app_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "56d89a25-f6be-4c20-a6d6-0d6caa8ff3ab",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "apps",
+                    ":app_id",
+                    "push",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "org_id",
+                      "description": "(Required) organization id"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "app_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7cb3eaf9-6266-429d-a68e-473d231f0999",
+          "name": "Edit a existing campaign with the given parameters. Note that campaigns with `active` status will be sent to end users upon the configured schedule with no further confirmation.\n",
+          "request": {
+            "name": "Edit a existing campaign with the given parameters. Note that campaigns with `active` status will be sent to end users upon the configured schedule with no further confirmation.\n",
+            "description": {},
+            "url": {
+              "path": [
+                "orgs",
+                ":org_id",
+                "apps",
+                ":app_id",
+                "push",
+                "campaigns",
+                ":campaign_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "org_id",
+                  "description": "(Required) The organization id found in your Dashboard containing your app."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "app_id",
+                  "description": "(Required) The App Key which will receive this message, which can be found under the settings page of your Dashboard."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "campaign_id",
+                  "description": "(Required) Campaign id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"status\": \"<string>\",\n  \"goal\": \"<string>\",\n  \"audiences\": {\n    \"campaign_type\": \"<string>\"\n  },\n  \"schedule\": {},\n  \"creatives\": \"<object>\",\n  \"conversion_event\": {\n    \"event_name\": \"<string>\",\n    \"conversion_attributes\": {\n      \"filters\": [\n        {\n          \"dimension_name\": \"<string>\",\n          \"operator\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        {\n          \"dimension_name\": \"<string>\",\n          \"operator\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      ],\n      \"operator\": \"<string>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7bbbb8a8-e13e-42b6-a935-fca313056d45",
+              "name": "Successfully edited the campaign with the updated values.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "apps",
+                    ":app_id",
+                    "push",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "org_id",
+                      "description": "(Required) The organization id found in your Dashboard containing your app."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "app_id",
+                      "description": "(Required) The App Key which will receive this message, which can be found under the settings page of your Dashboard."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "campaign_id",
+                      "description": "(Required) Campaign id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"status\": \"<string>\",\n  \"goal\": \"<string>\",\n  \"audiences\": {\n    \"campaign_type\": \"<string>\"\n  },\n  \"schedule\": {},\n  \"creatives\": \"<object>\",\n  \"conversion_event\": {\n    \"event_name\": \"<string>\",\n    \"conversion_attributes\": {\n      \"filters\": [\n        {\n          \"dimension_name\": \"App Version\",\n          \"operator\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        {\n          \"dimension_name\": \"App Version\",\n          \"operator\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      ],\n      \"operator\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"<string>\",\n  \"status\": \"<string>\",\n  \"goal\": \"<string>\",\n  \"audiences\": {\n    \"campaign_type\": \"<string>\"\n  },\n  \"schedule\": {},\n  \"creatives\": \"<object>\",\n  \"id\": 5539,\n  \"conversion_event\": {\n    \"event_name\": \"<string>\",\n    \"conversion_attributes\": {\n      \"filters\": [\n        {\n          \"dimension_name\": \"App Version\",\n          \"operator\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        {\n          \"dimension_name\": \"App Version\",\n          \"operator\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      ],\n      \"operator\": \"<string>\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a1819787-0ec8-4d39-b503-20bff2c710cc",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "apps",
+                    ":app_id",
+                    "push",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "org_id",
+                      "description": "(Required) The organization id found in your Dashboard containing your app."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "app_id",
+                      "description": "(Required) The App Key which will receive this message, which can be found under the settings page of your Dashboard."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "campaign_id",
+                      "description": "(Required) Campaign id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"status\": \"<string>\",\n  \"goal\": \"<string>\",\n  \"audiences\": {\n    \"campaign_type\": \"<string>\"\n  },\n  \"schedule\": {},\n  \"creatives\": \"<object>\",\n  \"conversion_event\": {\n    \"event_name\": \"<string>\",\n    \"conversion_attributes\": {\n      \"filters\": [\n        {\n          \"dimension_name\": \"App Version\",\n          \"operator\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        {\n          \"dimension_name\": \"App Version\",\n          \"operator\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      ],\n      \"operator\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "87316af5-219a-4f07-878f-9ecb5a7adceb",
+              "name": "Campaign not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "apps",
+                    ":app_id",
+                    "push",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "org_id",
+                      "description": "(Required) The organization id found in your Dashboard containing your app."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "app_id",
+                      "description": "(Required) The App Key which will receive this message, which can be found under the settings page of your Dashboard."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "campaign_id",
+                      "description": "(Required) Campaign id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"status\": \"<string>\",\n  \"goal\": \"<string>\",\n  \"audiences\": {\n    \"campaign_type\": \"<string>\"\n  },\n  \"schedule\": {},\n  \"creatives\": \"<object>\",\n  \"conversion_event\": {\n    \"event_name\": \"<string>\",\n    \"conversion_attributes\": {\n      \"filters\": [\n        {\n          \"dimension_name\": \"App Version\",\n          \"operator\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        {\n          \"dimension_name\": \"App Version\",\n          \"operator\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      ],\n      \"operator\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b2574e25-4b66-413a-ae01-1e5a7307bd95",
+              "name": "Invalid input parameters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "apps",
+                    ":app_id",
+                    "push",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "org_id",
+                      "description": "(Required) The organization id found in your Dashboard containing your app."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "app_id",
+                      "description": "(Required) The App Key which will receive this message, which can be found under the settings page of your Dashboard."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "campaign_id",
+                      "description": "(Required) Campaign id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"status\": \"<string>\",\n  \"goal\": \"<string>\",\n  \"audiences\": {\n    \"campaign_type\": \"<string>\"\n  },\n  \"schedule\": {},\n  \"creatives\": \"<object>\",\n  \"conversion_event\": {\n    \"event_name\": \"<string>\",\n    \"conversion_attributes\": {\n      \"filters\": [\n        {\n          \"dimension_name\": \"App Version\",\n          \"operator\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        {\n          \"dimension_name\": \"App Version\",\n          \"operator\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      ],\n      \"operator\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "93adaddb-9ea3-4ae3-96c8-b5ca24cbd0c4",
+          "name": "Archive the push campaign.",
+          "request": {
+            "name": "Archive the push campaign.",
+            "description": {},
+            "url": {
+              "path": [
+                "orgs",
+                ":org_id",
+                "apps",
+                ":app_id",
+                "push",
+                "campaigns",
+                ":campaign_id",
+                "archive"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "org_id",
+                  "description": "(Required) organization id"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "app_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "campaign_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "method": "PUT",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e1b0c719-dbb7-42ad-b130-ddeb86d7e3a1",
+              "name": "Successfully archived the given campaign.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "apps",
+                    ":app_id",
+                    "push",
+                    "campaigns",
+                    ":campaign_id",
+                    "archive"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "org_id",
+                      "description": "(Required) organization id"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "app_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "53839a04-39f2-4fb2-affd-bc680c5f7e5d",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "apps",
+                    ":app_id",
+                    "push",
+                    "campaigns",
+                    ":campaign_id",
+                    "archive"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "org_id",
+                      "description": "(Required) organization id"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "app_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e8e283b1-2ea8-4587-afb6-937d4e37391b",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "apps",
+                    ":app_id",
+                    "push",
+                    "campaigns",
+                    ":campaign_id",
+                    "archive"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "org_id",
+                      "description": "(Required) organization id"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "app_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://dashboard.localytics.com/api/v6",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "b89e0327-feb6-401f-87bf-fe16d3c0b225",
+    "name": "Localytics Campaigns And Audience Audiences Push Campaigns API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Localytics is an enterprise-grade mobile intelligence platform for real-time analytics, personalized marketing, and customer lifecycle optimization.\n\n- Campaign Functionality - The platform supports comprehensive campaign creation and management through this API, enabling flexible configuration of goal, scheduling, and target audience.\n\n  * Enables full campaign scheduling with A/B testing via multiple creatives, control-group weights, and advanced scheduling and delivery controls.\n\n  * Upload creative assets (HTML/Javascript/CSS assets) via API for the supporting channels (In-App, Inbox)\n\n  * Associate creatives with campaigns using standard formatting options from dashboard.\n\n  * Supported channels:\n      Push Messaging\n",
+      "type": "text/plain"
+    }
+  }
+}

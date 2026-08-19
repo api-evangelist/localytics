@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "Events API Request V1",
+  "description": "A datapoint representing an event submitted to the Localytics Events API",
+  "type": "object",
+  "properties": {
+    "schema_url": {
+      "description": "the url of the schema for validating the request",
+      "type": "string",
+      "pattern": "^https://localytics-files.s3.amazonaws.com/schemas/eventsApi/v1.json$"
+    },
+    "app_uuid": {
+      "description": "the app's UUID",
+      "type": "string",
+      "minLength": 25,
+      "maxLength": 60
+    },
+    "customer_id": {
+      "description": "customer id for the user initiating the event",
+      "type": "string",
+      "minLength": 1
+    },
+    "event_name": {
+      "description": "name of the event",
+      "type": "string",
+      "maxLength": 128
+    },
+    "event_time": {
+      "description": "time of the event - milliseconds from Unix epoch GMT. Must be after January 1 2010.",
+      "type": "integer",
+      "minimum": 1262304000000
+    },
+    "uuid": {
+      "description": "unique identifier for this event, used to deduplicate identical datapoints submitted multiple times. Consists only of alphanumeric characters and dashes.",
+      "type": "string",
+      "minLength": 16,
+      "maxLength": 128,
+      "pattern": "^[0-9a-zA-Z\\-]{16,128}$"
+    },
+    "ltv_change": {
+      "description": "lifetime value change effected by this event for this customer in this app",
+      "type": "integer"
+    },
+    "attributes": {
+      "type": "object",
+      "patternProperties": {
+        "^.{1,128}$": {
+          "description": "user-defined key/value pairs. Maximum of 50 key/value pairs allowed per distinct event_name across all requests for all time.",
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "maxProperties": 50,
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schema_url",
+    "app_uuid",
+    "customer_id",
+    "event_name",
+    "event_time",
+    "uuid"
+  ]
+}

@@ -1,0 +1,176 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Localytics Campaigns And Audience Audiences Push Campaigns API",
+    "version": "1.1.2"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Push Campaigns",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a new push campaign with the given parameters. Note that campaigns with `active` status will be sent to end users upon the configured schedule with no further confirmation.\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dashboard.localytics.com/api/v6/orgs/:org_id/apps/:app_id/push/campaigns",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The organization id found in your Dashboard containing your app."
+              },
+              {
+                "name": "app_id",
+                "value": "",
+                "type": "path",
+                "description": "The App Key which will receive this message, which can be found under the settings page of your Dashboard."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new push campaign with the given parameters. Note that campaigns with `active` status will be sent to end users upon the configured schedule with no further confirmation.\n"
+        },
+        {
+          "info": {
+            "name": "Get the push campaign's audience, creatives, schedule details.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dashboard.localytics.com/api/v6/orgs/:org_id/apps/:app_id/push/campaigns/:campaign_id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "organization id"
+              },
+              {
+                "name": "app_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "campaign_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get the push campaign's audience, creatives, schedule details."
+        },
+        {
+          "info": {
+            "name": "Edit a existing campaign with the given parameters. Note that campaigns with `active` status will be sent to end users upon the configured schedule with no further confirmation.\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://dashboard.localytics.com/api/v6/orgs/:org_id/apps/:app_id/push/campaigns/:campaign_id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The organization id found in your Dashboard containing your app."
+              },
+              {
+                "name": "app_id",
+                "value": "",
+                "type": "path",
+                "description": "The App Key which will receive this message, which can be found under the settings page of your Dashboard."
+              },
+              {
+                "name": "campaign_id",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Edit a existing campaign with the given parameters. Note that campaigns with `active` status will be sent to end users upon the configured schedule with no further confirmation.\n"
+        },
+        {
+          "info": {
+            "name": "Delete the push campaign.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://dashboard.localytics.com/api/v6/orgs/:org_id/apps/:app_id/push/campaigns/:campaign_id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "organization id"
+              },
+              {
+                "name": "app_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "campaign_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete the push campaign."
+        },
+        {
+          "info": {
+            "name": "Archive the push campaign.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://dashboard.localytics.com/api/v6/orgs/:org_id/apps/:app_id/push/campaigns/:campaign_id/archive",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "organization id"
+              },
+              {
+                "name": "app_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "campaign_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Archive the push campaign."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

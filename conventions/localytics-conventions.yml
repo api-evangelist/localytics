@@ -1,4 +1,4 @@
-generated: '2026-07-20'
+generated: '2026-08-13'
 method: searched
 source: https://docs.localytics.com/dev/
 note: >-
@@ -15,13 +15,40 @@ authentication:
 idempotency:
   supported: true
   mechanism: request_id
-  location: request body field
-  scope: Push API (POST https://messaging.localytics.com/v2/push/<app_id>)
+  location: request body field (REST) / StreamInit field (gRPC)
+  header: null
+  header_note: >-
+    Localytics uses a request BODY field, not an Idempotency-Key header. An agent cannot make an
+    arbitrary call idempotent by adding a header; it must set the field the specific surface names.
   retention: 24 hours
-  detail: >-
-    An optional request_id GUID de-duplicates repeated push requests within a 24-hour window,
-    preventing duplicate message delivery on retry.
-  docs: https://docs.localytics.com/dev/push-api.html
+  max_length: 255
+  scopes:
+    - surface: Push API (REST)
+      endpoint: 'POST https://messaging.localytics.com/v2/push/{app_id}'
+      field: request_id
+      dedupe_key: app_id + customer_id
+      window: 24 hours
+      detail: >-
+        An optional request_id GUID de-duplicates repeated push requests within 24 hours of each
+        other at the app_id + customer_id level, preventing duplicate delivery on retry.
+      docs: https://docs.localytics.com/dev/push-api.html
+    - surface: gRPC PushService
+      method: push.PushService/StreamPush
+      field: StreamInit.request_id
+      generated_when_omitted: true
+      max_length: 255
+      detail: >-
+        Auto-generated as a UUID when omitted; returned on PushResponse.request_id so a caller can
+        correlate the summary with the stream it sent. Each stream gets its own request_id and
+        independent limits.
+      docs: https://github.com/localytics/push-notification-protos/blob/develop/usage.md
+    - surface: Events API
+      field: uuid
+      detail: >-
+        The published request JSON Schema defines uuid as a "unique identifier for this event, used
+        to deduplicate identical datapoints submitted multiple times", 16-128 alphanumerics/dashes.
+      docs: json-schema/localytics-events-api-v1-schema.json
+  not_supported_on: [Campaigns & Audience API, Query/Reporting API, Profile API, Export APIs, Import APIs, Places API]
 pagination:
   supported: partial
   detail: >-
@@ -45,10 +72,55 @@ error_envelope:
   ref: errors/localytics-problem-types.yml
 rate_limiting:
   detail: >-
-    Documented per-API. 429 Too Many Requests when exceeded. See rate-limits artifact.
+    Documented per-API in prose. 429 Too Many Requests on HTTP surfaces, RESOURCE_EXHAUSTED (8) on
+    the gRPC stream. NO rate-limit response headers are published on any surface — no
+    X-RateLimit-*, no RateLimit-*, no Retry-After — so a client has no runtime budget signal and
+    can only detect exhaustion after it happens.
+  headers_published: false
   ref: rate-limits/localytics-rate-limits.yml
+request_tracing:
+  supported: partial
+  detail: >-
+    No documented request-id response header. The push surfaces echo the caller-supplied
+    request_id back on the response (PushResponse.request_id on gRPC), and campaign_key rolls a
+    series of requests into one dashboard performance report, but there is no generic correlation
+    header across the estate.
+  fields: [request_id, campaign_key]
+campaign_key:
+  detail: >-
+    An optional arbitrary string (max 255 chars, pattern ^[\w\-.]+$) on push requests. When
+    included it generates a dashboard performance report; any later request reusing the same
+    campaign_key rolls into that existing report. Limited to 100 new campaign_keys per app_id, and
+    the key itself is immutable once used (only the display name can be edited).
+  docs: https://docs.localytics.com/dev/push-api.html
+labels:
+  detail: >-
+    Up to 10 string labels (label1..label10) may be attached to a push for campaign performance
+    tracking, at the top level and/or per message. Per-message labels merge with top-level labels
+    and win on conflict. A message may use the flat (labelN) or nested (labels object) shape but
+    not both — mixing returns HTTP 400.
+  docs: https://messaging.localytics.com/swagger.json
+protocols:
+  rest:
+    surfaces: [Query/Reporting, Push, Campaigns & Audience, Profile, Events, Exports, Imports, Places]
+  grpc:
+    surface: push.PushService/StreamPush
+    streaming: bidirectional
+    auth: HTTP Basic in gRPC metadata
+    max_stream_messages: 10000
+    max_customer_ids_per_message: 30000
+    max_stream_seconds: 600
+    connection_guidance: >-
+      Reuse one channel across streams (HTTP/2 multiplexing); open multiple parallel streams for
+      large campaigns; retry with backoff on UNAVAILABLE (14) and DEADLINE_EXCEEDED (4); never
+      retry UNAUTHENTICATED, PERMISSION_DENIED or INVALID_ARGUMENT.
+    ref: grpc/localytics-push.proto
 cross_links:
   authentication: authentication/localytics-authentication.yml
+  changelog: changelog/localytics-changelog.yml
+  sandbox: sandbox/localytics-sandbox.yml
+  conformance: conformance/localytics-conformance.yml
+  grpc: grpc/localytics-push.proto
   errors: errors/localytics-problem-types.yml
   lifecycle: lifecycle/localytics-lifecycle.yml
   rate_limits: rate-limits/localytics-rate-limits.yml

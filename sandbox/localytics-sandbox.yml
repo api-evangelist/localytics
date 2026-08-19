@@ -1,0 +1,79 @@
+generated: '2026-08-13'
+method: searched
+source: https://github.com/localytics/push-notification-protos/blob/develop/usage.md
+note: >-
+  Localytics publishes no test-vs-live key separation, no test-mode key prefix and no hosted
+  sandbox for its REST APIs — credentials are the same organization API key/secret in every
+  environment. What it does publish is a named sandbox endpoint for the gRPC push service, a
+  test flag on the push stream, and explicit guidance to use a separate development app_uuid
+  because events written through the API are irreversible. All values below are published by
+  Localytics verbatim; none are invented.
+test_live_separation:
+  supported: false
+  detail: >-
+    One organization-level API key/secret pair is used for both testing and production across the
+    Query, Push, Profile, Events, Export and Import APIs. There is no test-mode key prefix and no
+    mode switch, so the only isolation available is a separate application.
+environments:
+  - name: gRPC push sandbox
+    endpoint: 'trans-api-grpc.sandbox53.localytics.com:50051'
+    protocol: grpc
+    auth: 'HTTP Basic in gRPC metadata — authorization: Basic <base64(api_key:api_secret)>'
+    source: https://github.com/localytics/push-notification-protos/blob/develop/usage.md
+    note: >-
+      The only named non-production endpoint Localytics publishes anywhere. The client guide lists
+      it as the "Sandbox endpoint" for PushService.StreamPush; no production gRPC endpoint is
+      published in the repository.
+test_flags:
+  - name: test
+    type: boolean
+    where: StreamInit message on the gRPC push stream
+    default: false
+    detail: Test-mode flag on the push stream initialization message.
+    source: grpc/localytics-push.proto
+  - name: all_devices
+    type: boolean
+    where: StreamInit message on the gRPC push stream
+    default: false
+    detail: Targets all devices for the app rather than the supplied customer_ids.
+isolation_guidance:
+  - api: Events API
+    guidance: >-
+      "Like events tagged using a Localytics SDK, events that you create using the Events API
+      cannot be deleted or removed. We strongly suggest that you employ a dev app_uuid (NOT your
+      production app_uuid) when you develop and test services that use the Events API."
+    source: https://docs.localytics.com/dev/events-api.html
+  - api: Campaigns & Audience API
+    guidance: >-
+      Campaigns created with status `active` are sent to end users on the configured schedule with
+      no further confirmation. Create campaigns in a non-active status when testing.
+    source: openapi/_original/localytics-campaigns-audiences-openapi.yml
+validation_tooling:
+  - name: Events API JSON Schema v1
+    url: https://localytics-files.s3.amazonaws.com/schemas/eventsApi/v1.json
+    local: json-schema/localytics-events-api-v1-schema.json
+    detail: >-
+      Localytics maintains versioned JSON Schemas for Events API requests and instructs developers
+      to validate request payloads against the schema before submitting, as the closest thing to a
+      dry-run the platform offers. The schema requires the schema_url field to match its own URL.
+    recommended_validators:
+      - https://jsonlint.com/
+      - https://jsonschemalint.com/draft4/
+  - name: Localytics SDK sample apps
+    detail: First-party sample applications used to exercise the SDKs against a development app.
+    urls:
+      - https://github.com/localytics/localytics-ios-sample
+      - https://github.com/localytics/localytics-android-sample
+      - https://github.com/localytics/localytics-flutter-sample
+      - https://github.com/localytics/ll-expo-sample-project
+      - https://github.com/localytics/web-sdk-samples
+      - https://github.com/localytics/MauiSDKTester
+test_values: []
+test_values_note: >-
+  Localytics publishes no magic test identifiers, no test customer_ids and no simulator values.
+  Absence recorded rather than invented.
+gaps:
+  - No test/live key separation and no test-mode credentials.
+  - No hosted sandbox or console for the REST APIs; the Swagger UI at
+    https://messaging.localytics.com/docs executes against production.
+  - No test clocks, fixtures or event-trigger tooling.

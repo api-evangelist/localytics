@@ -1,24 +1,59 @@
-generated: '2026-07-20'
+generated: '2026-08-13'
 method: searched
 source: https://docs.localytics.com/dev/
 note: >-
-  Lifecycle posture assembled from the Localytics developer documentation and the harvested
-  OpenAPI. Multiple independently versioned API surfaces are in production.
+  Lifecycle posture assembled from the Localytics developer documentation, the published
+  Security Overview, the harvested OpenAPIs and a live probe of status.localytics.com. Multiple
+  independently versioned API surfaces are in production, each with its own version-history table.
 versioning:
   scheme: uri-path
   surfaces:
-    - { api: Query / Reporting, base: https://api.localytics.com/v1, current: v1 }
-    - { api: Push, base: https://messaging.localytics.com/v2, current: v2 }
-    - { api: Campaigns & Audience, base: https://dashboard.localytics.com/api/v6, current: v6 }
+    - { api: Query / Reporting, base: 'https://api.localytics.com/v1', current: v1 }
+    - { api: Push (transactional REST), base: 'https://messaging.localytics.com/v2', current: 'v2 (OpenAPI info.version 2.0.0)' }
+    - { api: Campaigns & Audience, base: 'https://dashboard.localytics.com/api/v6', current: 'v6 (OpenAPI info.version 1.1.2)' }
+    - { api: Profile, base: 'https://profile.localytics.com/v1', current: v1 }
+    - { api: Events, base: 'https://analytics.localytics.com/events/v1', current: 'v1 (GA 2019-03-31)' }
+    - { api: Exports (audiences / profiles / logs), base: 'https://api.localytics.com/v1/exports', current: v1 }
+    - { api: Imports (profiles / audiences), base: 'https://api.localytics.com/v1/imports', current: v1 }
+    - { api: Places, base: 'https://api.localytics.com/v1/places', current: v1 }
+    - { api: gRPC Push Service, proto_package: push, service: PushService, current: 'push.proto @ develop' }
+  changelog: changelog/localytics-changelog.yml
 maturity:
-  campaigns_audiences_api: BETA (OpenAPI info.version 1.1.2)
+  campaigns_audiences_api: 'BETA (OpenAPI info.version 1.1.2)'
+  transactional_push_api: 'GA (OpenAPI info.version 2.0.0)'
+  grpc_push_service: 'Sandbox endpoint only in the published client guide; no production endpoint documented'
 deprecation:
   policy_url: null
   sunset_header: false
-  note: No formal deprecation policy or RFC 8594 Sunset/Deprecation header support found in docs.
+  note: >-
+    No formal deprecation policy and no RFC 8594 Sunset/Deprecation header support found in any
+    Localytics documentation. Breaking change is handled per-surface in the version-history table
+    (e.g. Audience Exports 1.0, 2017-04-06, shipped a "new URL structure" with no migration window
+    or sunset date published).
 sla:
-  url: null
-  note: No public SLA/uptime commitment found.
-status_page: null
-status_page_note: No public status page (status.localytics.com) found during probe.
+  url: https://www.localytics.com/security
+  uptime_target: null
+  note: >-
+    The Security Overview (last updated 2026-04-29) states explicitly, under "Availability and
+    Service Expectations", that unless otherwise specified in an Order Form or Service Level
+    Agreement, "Services are provided without a guaranteed uptime commitment" and maintenance
+    activities may impact availability. There is no public SLA.
+status_page: https://status.localytics.com/
+status_page_detail:
+  provider: Atlassian Statuspage
+  probed: '2026-08-13'
+  http_status: 200
+  state_at_probe: All Systems Operational
+  history_window: 90 days
+  components:
+    - Dashboard
+    - Exports API
+    - Imports API
+    - In-App & Inbox Messaging
+    - Inbox Messaging
+  subscribe: [email, Slack, Microsoft Teams, Atom, RSS]
 deprecated_operations: []
+gaps:
+  - No deprecation policy, no Sunset/Deprecation headers.
+  - No public SLA or uptime commitment (explicitly disclaimed).
+  - The status page is not linked from the developer documentation.

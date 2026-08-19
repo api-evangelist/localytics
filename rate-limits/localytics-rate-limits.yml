@@ -1,21 +1,106 @@
-generated: '2026-07-20'
+generated: '2026-08-13'
 method: searched
 source: https://docs.localytics.com/dev/
 note: >-
-  Rate limits published in the Localytics developer documentation. 429 Too Many Requests is
-  returned when a limit is exceeded.
+  Published rate limits across every documented Localytics API surface, read from the Limits /
+  Rate Limits sections of each API reference page plus the gRPC push service client guide.
+  Localytics documents the NUMBERS but publishes no rate-limit RESPONSE HEADERS on any surface —
+  no X-RateLimit-*, no RateLimit-*, no Retry-After is documented, so a client cannot read its
+  remaining budget at runtime and can only detect exhaustion from the status code.
+limit_count: 17
+exhaustion:
+  http_status: 429
+  grpc_status: RESOURCE_EXHAUSTED (8)
+  headers_published: false
+  retry_after: false
+  detail: >-
+    HTTP surfaces return 429 Too Many Requests with a descriptive message body. The gRPC push
+    service returns RESOURCE_EXHAUSTED (8) for stream/message-size limits. No runtime budget
+    header is documented on any surface.
 apis:
   - api: Query / Reporting API
     docs: https://docs.localytics.com/dev/query-api.html
+    base: https://api.localytics.com/v1
     limits:
-      - { scope: concurrency, limit_count: 1, window: simultaneous request }
-      - { scope: per-minute, limit_count: 60, window: 1 minute }
-      - { scope: per-hour, limit_count: 150, window: 1 hour }
-      - { scope: per-day, limit_count: 1000, window: 1 day }
-  - api: Push API
+      - { scope: per-key, concurrency: 1, limit_count: 1, window: simultaneous request }
+      - { scope: per-key, limit_count: 60, window: 1 minute }
+      - { scope: per-key, limit_count: 150, window: 1 hour }
+      - { scope: per-key, limit_count: 1000, window: 1 day }
+  - api: Push API (transactional)
     docs: https://docs.localytics.com/dev/push-api.html
+    base: https://messaging.localytics.com/v2
     limits:
-      - { scope: target_type=customer_id, limit_count: 1000, window: 1 second }
-      - { scope: target_type=broadcast, limit_count: 2, window: 1 minute }
-      - { scope: target_type=profile, limit_count: 100, window: 10 minutes }
-      - { scope: target_type=audience_id, limit_count: 2, window: 1 minute }
+      - { scope: 'target_type=customer_id', limit_count: 1000, window: 1 second }
+      - { scope: 'target_type=broadcast', limit_count: 2, window: 1 minute }
+      - { scope: 'target_type=profile', limit_count: 100, window: 10 minutes }
+      - { scope: 'target_type=audience_id', limit_count: 2, window: 1 minute }
+    other_limits:
+      - { name: campaign_key, limit_count: 100, window: per app_id, detail: 'new campaign_keys per app_id' }
+      - { name: request_id, detail: 'max 255 characters; de-duplicates within 24 hours at app_id + customer_id level' }
+  - api: Events API
+    docs: https://docs.localytics.com/dev/events-api.html
+    base: https://analytics.localytics.com/events/v1
+    limits:
+      - { scope: per-key, limit_count: 150, window: 1 second, unit: transactions }
+    other_limits:
+      - { name: body size, limit_count: 256, unit: KB, detail: '413 returned when the POST body exceeds 256 KB' }
+  - api: Audience Exports
+    docs: https://docs.localytics.com/dev/export-apis.html
+    base: https://api.localytics.com/v1/exports/audiences
+    limits:
+      - { scope: per-key, limit_count: 50, window: 1 minute }
+    note: >-
+      The Limits section states 50 requests per minute while the 429 row of the HTTP response-code
+      table states 10 requests per minute. The provider's own documentation disagrees with itself;
+      both values recorded verbatim rather than reconciled.
+  - api: Profile Exports
+    docs: https://docs.localytics.com/dev/export-apis.html
+    base: https://api.localytics.com/v1/exports/profiles
+    limits:
+      - { scope: per-key, limit_count: 50, window: 1 minute }
+    note: 'Same 50/min vs 10/min documentation conflict as Audience Exports.'
+  - api: Raw Log Exports
+    docs: https://docs.localytics.com/dev/export-apis.html
+    base: https://api.localytics.com/v1/exports/analytics/logs
+    limits:
+      - { scope: per-key, limit_count: 50, window: 1 minute }
+  - api: Profile Imports
+    docs: https://docs.localytics.com/dev/import-apis.html
+    base: https://api.localytics.com/v1/imports/profiles/upload
+    limits:
+      - { scope: per-key, limit_count: 10, window: 1 hour }
+      - { scope: 'per-key (status endpoint)', limit_count: 60, window: 1 minute }
+  - api: Audience Imports
+    docs: https://docs.localytics.com/dev/import-apis.html
+    base: https://api.localytics.com/v1/imports/audiences/list/
+    limits:
+      - { scope: per-key, limit_count: 60, window: 1 minute }
+      - { scope: 'per-key (status endpoint)', limit_count: 60, window: 1 minute }
+    other_limits:
+      - { name: audience lists, limit_count: 500, detail: 'maximum lists held in Localytics at any one time' }
+  - api: Places API (POI Sync)
+    docs: https://docs.localytics.com/dev/places-api.html
+    base: https://api.localytics.com/v1/places/apps
+    limits:
+      - { scope: per-app, limit_count: 20, window: 1 hour }
+      - { scope: per-app, limit_count: 50, window: 1 day }
+  - api: gRPC Push Service (StreamPush)
+    docs: https://github.com/localytics/push-notification-protos/blob/develop/usage.md
+    base: 'trans-api-grpc.sandbox53.localytics.com:50051'
+    limits:
+      - { scope: per-stream, limit_count: 10000, unit: PushRequest messages, grpc_status: 'RESOURCE_EXHAUSTED (8)' }
+      - { scope: per-message, limit_count: 30000, unit: customer_ids, grpc_status: 'INVALID_ARGUMENT (3)' }
+      - { scope: per-stream, limit_count: 600, unit: seconds wall clock, grpc_status: 'DEADLINE_EXCEEDED (4)' }
+      - { scope: per-message, limit_count: 4, unit: MiB receive size, grpc_status: 'RESOURCE_EXHAUSTED (8)' }
+  - api: Campaigns & Audience API
+    docs: https://docs.localytics.com/campaigns_audiences_api.html
+    base: https://dashboard.localytics.com/api/v6
+    limits: []
+    note: No rate limits published for the Campaigns & Audience API in its OpenAPI or reference page.
+  - api: Direct Access (Snowflake)
+    docs: https://docs.localytics.com/dev/directaccess.html
+    limits: []
+    note: >-
+      Not rate-limited by request count; metered in Snowflake credits against a purchased monthly
+      warehouse-hour quota. Warehouses auto-suspend after 10 minutes of inactivity and bill a
+      10-minute minimum per query. See plans/localytics-plans-pricing.yml.

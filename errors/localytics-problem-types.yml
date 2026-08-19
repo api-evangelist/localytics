@@ -1,58 +1,160 @@
-generated: '2026-07-20'
-method: derived
-source: openapi/localytics-campaigns-audiences-openapi.yml
+generated: '2026-08-13'
+method: searched
+source: https://docs.localytics.com/dev/
+derived_from: openapi/_original/localytics-campaigns-audiences-openapi.yml
 format: http-status
-envelope: JSON error body (no application/problem+json declared)
-note: Derived from OpenAPI 4xx/5xx responses of the Campaigns And Audience API.
+envelope: >-
+  JSON error body. The Query/Reporting API returns {"error": "message describing what happened"}
+  under Content-Type application/vnd.localytics.v1+hal+json;type=Error. Other REST surfaces return
+  a descriptive JSON message. No application/problem+json (RFC 9457) is declared or served on any
+  surface. The gRPC push service uses standard gRPC status codes instead of an HTTP envelope.
+note: >-
+  Consolidated error reference. Localytics publishes a per-API "HTTP Response Codes" / "Responses
+  and Errors" table on each reference page and a full gRPC status-code table in the push-service
+  client guide; those tables are captured verbatim below, alongside the codes derived from the
+  Campaigns & Audience OpenAPI.
+surfaces:
+  - api: Query / Reporting API
+    docs: https://docs.localytics.com/dev/query-api.html
+    codes:
+      - { status: 200, title: OK, meaning: success }
+      - { status: 401, title: Unauthorized, meaning: authentication is required but missing }
+      - { status: 403, title: Forbidden, meaning: authorization failed }
+      - { status: 404, title: Not Found, meaning: the requested resource is not found }
+      - { status: 406, title: Not Acceptable, meaning: the response format in the Accept request header is not supported }
+      - { status: 422, title: Unprocessable Entity, meaning: error in user input }
+      - { status: 500, title: Internal Server Error, meaning: error in Localytics API }
+      - { status: 502, title: Bad Gateway, meaning: error connecting to back-end services }
+  - api: Push API (transactional)
+    docs: https://docs.localytics.com/dev/push-api.html
+    codes:
+      - { status: 202, title: Accepted, meaning: queued for delivery }
+      - { status: 400, title: Bad Request, meaning: issue with the request format; the response message indicates the specific error }
+      - { status: 401, title: Unauthorized, meaning: the API key and API secret are not valid }
+      - { status: 403, title: Forbidden, meaning: 'issue authorizing use of the referenced app_id, audience_id, push certificate and/or platform' }
+      - { status: 429, title: Too Many Requests, meaning: rate limit exceeded for the given target_type }
+  - api: Events API
+    docs: https://docs.localytics.com/dev/events-api.html
+    codes:
+      - { status: 202, title: Accepted, meaning: the transaction was correctly formatted }
+      - { status: 400, title: Bad Request, meaning: a required parameter is missing or malformed }
+      - { status: 401, title: Unauthorized, meaning: the supplied API key/secret parameters were not valid }
+      - { status: 413, title: Payload Too Large, meaning: the POST body was larger than 256 KB }
+      - { status: 415, title: Unsupported Media Type, meaning: 'Content-Type was not application/json or application/x-gzip, or the gzip body was invalid' }
+      - { status: 429, title: Too Many Requests, meaning: the transaction exceeded the API rate limit }
+  - api: Audience Exports
+    docs: https://docs.localytics.com/dev/export-apis.html
+    codes:
+      - { status: 302, title: Found, meaning: request succeeded; Localytics redirects the requestor to a file containing the export }
+      - { status: 401, title: Unauthorized, meaning: the provided authentication parameters were not valid }
+      - { status: 403, title: Forbidden, meaning: credentials do not match a Localytics Org, or the Org lacks access to the audience }
+      - { status: 404, title: Not Found, meaning: 'the source type is unknown (must be "audience")' }
+      - { status: 429, title: Too Many Requests, meaning: request-per-minute limit exceeded }
+  - api: Profile Exports
+    docs: https://docs.localytics.com/dev/export-apis.html
+    codes:
+      - { status: 302, title: Found, meaning: request succeeded; redirect to the export file }
+      - { status: 401, title: Unauthorized, meaning: invalid authentication parameters }
+      - { status: 403, title: Forbidden, meaning: credentials do not match a Localytics Org or lack access to the Exports }
+      - { status: 404, title: Not Found, meaning: 'the source type is unknown (must be "profiles")' }
+      - { status: 429, title: Too Many Requests, meaning: request-per-minute limit exceeded }
+  - api: Raw Log Exports
+    docs: https://docs.localytics.com/dev/export-apis.html
+    codes:
+      - { status: 302, title: Found, meaning: request succeeded; redirect to the export file }
+      - { status: 401, title: Unauthorized, meaning: invalid authentication parameters }
+      - { status: 403, title: Forbidden, meaning: credentials do not match a Localytics Org or lack access to the Exports }
+      - { status: 404, title: Not Found, meaning: export not yet complete, invalid app ID, or app without log exports configured }
+      - { status: 429, title: Too Many Requests, meaning: 50-request-per-minute limit exceeded }
+  - api: Profile Imports
+    docs: https://docs.localytics.com/dev/import-apis.html
+    codes:
+      - { status: 202, title: Accepted, meaning: request succeeded; the file is queued for processing }
+      - { status: 401, title: Unauthorized, meaning: invalid authentication parameters }
+      - { status: 403, title: Forbidden, meaning: credentials lack access to the specified organization or application }
+      - { status: 404, title: Not Found, meaning: the source type is unknown }
+      - { status: 429, title: Too Many Requests, meaning: '10/hour (import) or 60/minute (import status) limit exceeded' }
+  - api: Audience Imports
+    docs: https://docs.localytics.com/dev/import-apis.html
+    codes:
+      - { status: 200, title: OK, meaning: request succeeded; the file is queued for processing }
+      - { status: 401, title: Unauthorized, meaning: invalid authentication parameters }
+      - { status: 403, title: Forbidden, meaning: credentials lack access to the specified organization or application }
+      - { status: 404, title: Not Found, meaning: parameter not found }
+      - { status: 429, title: Too Many Requests, meaning: rate limit exceeded }
+  - api: gRPC Push Service (StreamPush)
+    docs: https://github.com/localytics/push-notification-protos/blob/develop/usage.md
+    protocol: grpc
+    codes:
+      - { code: 0, name: OK, meaning: stream completed successfully }
+      - { code: 3, name: INVALID_ARGUMENT, meaning: 'bad request_id or campaign_key format, missing alert, subtitle without title, empty customer_ids, too many customer IDs per message' }
+      - { code: 4, name: DEADLINE_EXCEEDED, meaning: stream exceeded max duration (default 10 min), retryable }
+      - { code: 7, name: PERMISSION_DENIED, meaning: app_id not owned by the authenticated org, not retryable }
+      - { code: 8, name: RESOURCE_EXHAUSTED, meaning: exceeded max messages per stream or message too large }
+      - { code: 9, name: FAILED_PRECONDITION, meaning: no push certificate configured for the app }
+      - { code: 13, name: INTERNAL, meaning: server-side error }
+      - { code: 14, name: UNAVAILABLE, meaning: transient; retry with backoff }
+      - { code: 16, name: UNAUTHENTICATED, meaning: missing, malformed or invalid credentials, not retryable }
+    in_stream_failures:
+      message: PushFailure
+      detail: >-
+        Partial failures do not terminate the stream. PushFailure messages carry the failed
+        customer_ids and a reason; the stream still closes with a successful PushResponse summary,
+        so clients must read all responses until EOF.
 problems:
-- status: 401
-  title: Unauthorized
-  description: Unauthorized
-  source_operations:
-  - openapi/localytics-campaigns-audiences-openapi.yml#CreatePushCampaign
-  - openapi/localytics-campaigns-audiences-openapi.yml#GetPushCampaign
-  - openapi/localytics-campaigns-audiences-openapi.yml#DeletePushCampaign
-  - openapi/localytics-campaigns-audiences-openapi.yml#editPushCampaign
-  - openapi/localytics-campaigns-audiences-openapi.yml#ArchivePushCampaign
-  - openapi/localytics-campaigns-audiences-openapi.yml#createAudiences
-  - openapi/localytics-campaigns-audiences-openapi.yml#ListAudiences
-  - openapi/localytics-campaigns-audiences-openapi.yml#AudienceSegmentation
-  - openapi/localytics-campaigns-audiences-openapi.yml#GetAudienceSegmentationCount
-  - openapi/localytics-campaigns-audiences-openapi.yml#editAudiences
-  - openapi/localytics-campaigns-audiences-openapi.yml#DeleteAudience
-- status: 403
-  title: Forbidden
-  description: Campaign cannot be deleted. It may be active or have jobs running.
-  source_operations:
-  - openapi/localytics-campaigns-audiences-openapi.yml#DeletePushCampaign
-- status: 404
-  title: Not found
-  description: Not found
-  source_operations:
-  - openapi/localytics-campaigns-audiences-openapi.yml#GetPushCampaign
-  - openapi/localytics-campaigns-audiences-openapi.yml#DeletePushCampaign
-  - openapi/localytics-campaigns-audiences-openapi.yml#editPushCampaign
-  - openapi/localytics-campaigns-audiences-openapi.yml#ArchivePushCampaign
-  - openapi/localytics-campaigns-audiences-openapi.yml#AudienceSegmentation
-  - openapi/localytics-campaigns-audiences-openapi.yml#GetAudienceSegmentationCount
-  - openapi/localytics-campaigns-audiences-openapi.yml#editAudiences
-  - openapi/localytics-campaigns-audiences-openapi.yml#DeleteAudience
-  - openapi/localytics-campaigns-audiences-openapi.yml#ListCampaigns
-  - openapi/localytics-campaigns-audiences-openapi.yml#SearchCampaigns
-- status: 422
-  title: Invalid input parameters
-  description: Invalid input parameters
-  source_operations:
-  - openapi/localytics-campaigns-audiences-openapi.yml#CreatePushCampaign
-  - openapi/localytics-campaigns-audiences-openapi.yml#editPushCampaign
-  - openapi/localytics-campaigns-audiences-openapi.yml#createAudiences
-  - openapi/localytics-campaigns-audiences-openapi.yml#editAudiences
-  - openapi/localytics-campaigns-audiences-openapi.yml#DeleteAudience
-  - openapi/localytics-campaigns-audiences-openapi.yml#ListCampaigns
-  - openapi/localytics-campaigns-audiences-openapi.yml#SearchCampaigns
-- status: 500
-  title: Internal Server Error
-  description: Internal Server Error
-  source_operations:
-  - openapi/localytics-campaigns-audiences-openapi.yml#ListCampaigns
-  - openapi/localytics-campaigns-audiences-openapi.yml#SearchCampaigns
+  - status: 401
+    title: Unauthorized
+    description: Unauthorized
+    source_operations:
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#CreatePushCampaign
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#GetPushCampaign
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#DeletePushCampaign
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#editPushCampaign
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#ArchivePushCampaign
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#createAudiences
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#ListAudiences
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#AudienceSegmentation
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#GetAudienceSegmentationCount
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#editAudiences
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#DeleteAudience
+  - status: 403
+    title: Forbidden
+    description: Campaign cannot be deleted. It may be active or have jobs running.
+    source_operations:
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#DeletePushCampaign
+  - status: 404
+    title: Not found
+    description: Not found
+    source_operations:
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#GetPushCampaign
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#DeletePushCampaign
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#editPushCampaign
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#ArchivePushCampaign
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#AudienceSegmentation
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#GetAudienceSegmentationCount
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#editAudiences
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#DeleteAudience
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#ListCampaigns
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#SearchCampaigns
+  - status: 422
+    title: Invalid input parameters
+    description: Invalid input parameters
+    source_operations:
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#CreatePushCampaign
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#editPushCampaign
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#createAudiences
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#editAudiences
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#DeleteAudience
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#ListCampaigns
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#SearchCampaigns
+  - status: 500
+    title: Internal Server Error
+    description: Internal Server Error
+    source_operations:
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#ListCampaigns
+      - openapi/_original/localytics-campaigns-audiences-openapi.yml#SearchCampaigns
+gaps:
+  - No machine-readable error-code registry; every table is prose HTML in the docs.
+  - No stable error type URIs, no error codes beyond HTTP status, no RFC 9457 problem+json.
+  - The Transactional Push API OpenAPI (messaging.localytics.com/swagger.json) defines an Error
+    schema but no operationIds, so error responses cannot be bound to named operations.
