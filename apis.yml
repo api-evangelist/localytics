@@ -40,6 +40,18 @@ modified: '2026-08-13'
 image: https://localytics.com/og-image.png
 tags:
 - Company
+- MarTech
+- Mobile Analytics
+- Push Notifications
+- Customer Engagement
+- Marketing Automation
+- Mobile
+- Segmentation
+- Audiences
+- Event Ingestion
+- gRPC
+tags_raw:
+- Company
 - Martech
 - Mobile Analytics
 - Push Notifications
@@ -151,6 +163,9 @@ apis:
   humanURL: https://docs.localytics.com/dev/events-api.html
   baseURL: https://analytics.localytics.com/events/v1
   tags:
+  - Event
+  - Ingestion
+  tags_raw:
   - Events
   - Ingestion
   properties:
