@@ -100,37 +100,13 @@ apis:
     url: openapi/localytics-push-campaigns-api-openapi.yml
   - type: APIReference
     url: https://docs.localytics.com/campaigns_audiences_api.html
-- aid: localytics:localytics-transactional-push-api
-  name: Localytics Transactional Push API
-  description: >-
-    Programmatic push messaging delivery. Submit a batch of pushes for an application targeting
-    customer_ids, an audience_id, a profile query, or a broadcast; messages are forwarded to
-    push-segmenter or message-delivery depending on target type. OpenAPI 3.0.3 served live by
-    Localytics at https://messaging.localytics.com/swagger.json with a Swagger UI at /docs.
-  humanURL: https://docs.localytics.com/dev/push-api.html
-  baseURL: https://messaging.localytics.com
-  tags:
-  - Push Notifications
-  - Messaging
-  - Transactional
-  properties:
-  - type: OpenAPI
-    url: openapi/_original/localytics-transactional-push-openapi.json
-  - type: Overlay
-    url: overlays/localytics-transactional-push-overlay.yaml
-  - type: APIReference
-    url: https://docs.localytics.com/dev/push-api.html
-  - type: Protobuf
-    url: grpc/localytics-push.proto
-  - type: AgentSkill
-    url: skills/localytics-send-transactional-push.md
 - aid: localytics:localytics-query-api
   name: Localytics Query API
   description: >-
-    HAL+JSON reporting and analytics API. Run queries over apps, events, sessions, users, profiles
-    and attribution data with metrics, dimensions and conditions; the service root at
-    https://api.localytics.com/v1 returns application/vnd.localytics.v1+hal+json with templated
-    _links. No machine-readable specification is published.
+    HAL+JSON reporting and analytics API. Run queries over apps, events, sessions, users, profiles and
+    attribution data with metrics, dimensions and conditions; the service root at https://api.localytics.com/v1
+    returns application/vnd.localytics.v1+hal+json with templated _links. No machine-readable specification
+    is published.
   humanURL: https://docs.localytics.com/dev/query-api.html
   baseURL: https://api.localytics.com/v1
   tags:
@@ -143,9 +119,8 @@ apis:
 - aid: localytics:localytics-profile-api
   name: Localytics Profile API
   description: >-
-    Read, create, update and delete user profile attributes used for targeting and segmentation,
-    addressed by customer_id at the org, app or customer scope. No machine-readable specification
-    is published.
+    Read, create, update and delete user profile attributes used for targeting and segmentation, addressed
+    by customer_id at the org, app or customer scope. No machine-readable specification is published.
   humanURL: https://docs.localytics.com/dev/profile-api.html
   baseURL: https://profile.localytics.com/v1
   tags:
@@ -157,9 +132,9 @@ apis:
 - aid: localytics:localytics-events-api
   name: Localytics Events API
   description: >-
-    Server-side event ingestion for in-app activity that completes off-device (purchases,
-    fulfilment, backend conversions). Accepts JSON or gzipped JSON up to 256 KB per POST, validated
-    against a published versioned JSON Schema.
+    Server-side event ingestion for in-app activity that completes off-device (purchases, fulfilment,
+    backend conversions). Accepts JSON or gzipped JSON up to 256 KB per POST, validated against a published
+    versioned JSON Schema.
   humanURL: https://docs.localytics.com/dev/events-api.html
   baseURL: https://analytics.localytics.com/events/v1
   tags:
@@ -176,9 +151,9 @@ apis:
 - aid: localytics:localytics-export-apis
   name: Localytics Export APIs
   description: >-
-    Bulk export of audiences, profiles and raw analytics logs. Requests return a 302 redirect to a
-    generated export file; audiences must be enabled for export in the dashboard first. No
-    machine-readable specification is published.
+    Bulk export of audiences, profiles and raw analytics logs. Requests return a 302 redirect to a generated
+    export file; audiences must be enabled for export in the dashboard first. No machine-readable specification
+    is published.
   humanURL: https://docs.localytics.com/dev/export-apis.html
   baseURL: https://api.localytics.com/v1/exports
   tags:
@@ -191,9 +166,9 @@ apis:
 - aid: localytics:localytics-import-apis
   name: Localytics Import APIs
   description: >-
-    Bulk import of user profiles and audience lists built in external systems (CRM, marketing
-    cloud) into Localytics for targeting and campaign use, with an asynchronous status endpoint per
-    import job. No machine-readable specification is published.
+    Bulk import of user profiles and audience lists built in external systems (CRM, marketing cloud) into
+    Localytics for targeting and campaign use, with an asynchronous status endpoint per import job. No
+    machine-readable specification is published.
   humanURL: https://docs.localytics.com/dev/import-apis.html
   baseURL: https://api.localytics.com/v1/imports
   tags:
@@ -206,9 +181,9 @@ apis:
 - aid: localytics:localytics-places-api
   name: Localytics Places API
   description: >-
-    Point-of-interest sync for location-triggered messaging — upload and manage the geofence/POI
-    set an app monitors. Rate limited to 20 requests per hour and 50 per day per app. No
-    machine-readable specification is published.
+    Point-of-interest sync for location-triggered messaging — upload and manage the geofence/POI set an
+    app monitors. Rate limited to 20 requests per hour and 50 per day per app. No machine-readable specification
+    is published.
   humanURL: https://docs.localytics.com/dev/places-api.html
   baseURL: https://api.localytics.com/v1/places
   tags:
@@ -223,6 +198,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: AgentSkill
+  url: skills/localytics-send-transactional-push.md
 - type: DeveloperPortal
   url: https://docs.localytics.com/
 - type: Documentation
