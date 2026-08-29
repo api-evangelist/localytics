@@ -1,0 +1,95 @@
+openapi: 3.2.0
+info:
+  title: Localytics Transactional Push Meta API
+  version: 2.0.0
+  description: 'Programmatic push messaging delivery. Submit a batch of pushes for an application; messages are forwarded to push-segmenter (for audience/profile/broadcast targeting) or message-delivery (for customer_id targeting).
+
+
+    ## Per-message labels (all target types)
+
+
+    Each entry in `messages` may carry its own labels (same `label1`..`label10`, string-valued rules as the top-level `labels`). Per-message labels are **merged with** the top-level `labels`, and per-message keys **win on conflict**.
+
+
+    Two equivalent shapes are accepted on each message:
+
+
+    1. **Flat**: `labelN` fields directly on the message — `{ "target": "u1", "alert": "...", "label1": "rec-1" }`
+
+    2. **Nested**: a `labels` object on the message — `{ "target": "u1", "alert": "...", "labels": { "label1": "rec-1" } }`
+
+
+    A single message may use one shape or the other, but **not both** — mixing returns HTTP 400.
+
+
+    For `target_type: customer_id` this lets a caller bundle many distinct pushes into a single API call while still tagging each push with its own unique identifier (for example, an AI-generated request id), which is useful for time-window deliveries where the per-call rate limit would otherwise be a blocker. For `audience_id`, `profile`, and `broadcast` (which only allow a single message per batch) the per-message shape simply provides another spot to attach labels alongside the top-level `labels`.
+
+
+    Note: `audience_id`, `profile`, and `broadcast` still allow only one message per batch — the per-message labels feature does not change that constraint.'
+servers:
+- url: /
+  description: This service
+security:
+- basicAuth: []
+tags:
+- name: meta
+  description: Health and documentation endpoints
+paths:
+  /:
+    get:
+      tags:
+      - meta
+      summary: Health check
+      security: []
+      responses:
+        '200':
+          description: Service is up
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+  /v1/test:
+    post:
+      tags:
+      - meta
+      summary: Liveness ping
+      security: []
+      responses:
+        '200':
+          description: pong
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: pong
+  /swagger.json:
+    get:
+      tags:
+      - meta
+      summary: This OpenAPI document
+      security: []
+      responses:
+        '200':
+          description: OpenAPI 3.0 JSON document
+          content:
+            application/json: {}
+  /docs:
+    get:
+      tags:
+      - meta
+      summary: Interactive Swagger UI documentation
+      security: []
+      responses:
+        '200':
+          description: HTML page rendering Swagger UI against /swagger.json
+          content:
+            text/html: {}
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic with `api_key:api_secret`.

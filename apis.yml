@@ -204,6 +204,26 @@ apis:
   properties:
   - type: APIReference
     url: https://docs.localytics.com/dev/places-api.html
+- aid: localytics:localytics-meta-api
+  name: Localytics Meta API
+  description: Health and documentation endpoints
+  humanURL: https://docs.localytics.com/campaigns_audiences_api.html
+  baseURL: https://dashboard.localytics.com/api/v6
+  tags:
+  - meta
+  properties:
+  - type: OpenAPI
+    url: openapi/localytics-meta-api-openapi.yml
+- aid: localytics:localytics-push-api
+  name: Localytics Push API
+  description: Transactional push send endpoints
+  humanURL: https://docs.localytics.com/campaigns_audiences_api.html
+  baseURL: https://dashboard.localytics.com/api/v6
+  tags:
+  - push
+  properties:
+  - type: OpenAPI
+    url: openapi/localytics-push-api-openapi.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
