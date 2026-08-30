@@ -52,7 +52,7 @@ modified: '2026-08-13'
 image: https://localytics.com/og-image.png
 tags:
 - Company
-- MarTech
+- Martech
 - Mobile Analytics
 - Push Notifications
 - Customer Engagement
@@ -210,6 +210,8 @@ apis:
   humanURL: https://docs.localytics.com/campaigns_audiences_api.html
   baseURL: https://dashboard.localytics.com/api/v6
   tags:
+  - Meta
+  tags_raw:
   - meta
   properties:
   - type: OpenAPI
@@ -220,6 +222,8 @@ apis:
   humanURL: https://docs.localytics.com/campaigns_audiences_api.html
   baseURL: https://dashboard.localytics.com/api/v6
   tags:
+  - Push
+  tags_raw:
   - push
   properties:
   - type: OpenAPI
