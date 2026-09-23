@@ -2,43 +2,20 @@ openapi: 3.2.0
 info:
   title: Localytics Transactional Push API
   version: 2.0.0
-  description: 'Programmatic push messaging delivery. Submit a batch of pushes for an application; messages are forwarded to push-segmenter (for audience/profile/broadcast targeting) or message-delivery (for customer_id targeting).
-
-
-    ## Per-message labels (all target types)
-
-
-    Each entry in `messages` may carry its own labels (same `label1`..`label10`, string-valued rules as the top-level `labels`). Per-message labels are **merged with** the top-level `labels`, and per-message keys **win on conflict**.
-
-
-    Two equivalent shapes are accepted on each message:
-
-
-    1. **Flat**: `labelN` fields directly on the message — `{ "target": "u1", "alert": "...", "label1": "rec-1" }`
-
-    2. **Nested**: a `labels` object on the message — `{ "target": "u1", "alert": "...", "labels": { "label1": "rec-1" } }`
-
-
-    A single message may use one shape or the other, but **not both** — mixing returns HTTP 400.
-
-
-    For `target_type: customer_id` this lets a caller bundle many distinct pushes into a single API call while still tagging each push with its own unique identifier (for example, an AI-generated request id), which is useful for time-window deliveries where the per-call rate limit would otherwise be a blocker. For `audience_id`, `profile`, and `broadcast` (which only allow a single message per batch) the per-message shape simply provides another spot to attach labels alongside the top-level `labels`.
-
-
-    Note: `audience_id`, `profile`, and `broadcast` still allow only one message per batch — the per-message labels feature does not change that constraint.'
+  description: Programmatic push messaging delivery.
 servers:
 - url: /
   description: This service
 security:
 - basicAuth: []
 tags:
-- name: push
+- name: Push
   description: Transactional push send endpoints
 paths:
   /v2/push/{app_id}:
     post:
       tags:
-      - push
+      - Push
       summary: Submit a transactional push batch
       description: 'Queues one or more push messages for delivery. The shape of `messages[*].target` depends on `target_type`.
 
@@ -239,6 +216,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+      operationId: postV2PushByAppId
+      x-operation-id-source: derived
 components:
   schemas:
     MessageAudienceId:
@@ -293,82 +272,15 @@ components:
         label10:
           type: string
           description: Optional flat-shape per-message label.
-    IosParams:
+    Labels:
       type: object
-      additionalProperties: false
-      properties:
-        sound:
-          type: string
-        badge:
-          type: integer
-        category:
-          type: string
-        extra:
-          type: object
-          additionalProperties: true
-        content_available:
-          type: boolean
-        mutable_content:
-          type: boolean
-    AndroidParams:
-      type: object
-      additionalProperties: false
-      properties:
-        extra:
-          type: object
-          additionalProperties: true
-        priority:
-          type: string
-          example: high
-    MessageBroadcast:
-      type: object
-      additionalProperties: false
-      description: Per-message labels can be supplied EITHER as the nested `labels` object OR as flat `label1`..`label10` fields directly on this object. Mixing both shapes in the same message returns HTTP 400.
-      properties:
-        target:
-          description: Must be omitted or null.
-        alert:
-          $ref: '#/components/schemas/Alert'
-        ios:
-          $ref: '#/components/schemas/IosParams'
-        android:
-          $ref: '#/components/schemas/AndroidParams'
-        web:
-          $ref: '#/components/schemas/WebParams'
-        labels:
-          allOf:
-          - $ref: '#/components/schemas/Labels'
-          description: Optional labels scoped to THIS message (nested shape). Merged with the top-level `labels`; per-message keys take precedence on conflict.
-        label1:
-          type: string
-          description: Optional flat-shape per-message label.
-        label2:
-          type: string
-          description: Optional flat-shape per-message label.
-        label3:
-          type: string
-          description: Optional flat-shape per-message label.
-        label4:
-          type: string
-          description: Optional flat-shape per-message label.
-        label5:
-          type: string
-          description: Optional flat-shape per-message label.
-        label6:
-          type: string
-          description: Optional flat-shape per-message label.
-        label7:
-          type: string
-          description: Optional flat-shape per-message label.
-        label8:
-          type: string
-          description: Optional flat-shape per-message label.
-        label9:
-          type: string
-          description: Optional flat-shape per-message label.
-        label10:
-          type: string
-          description: Optional flat-shape per-message label.
+      description: Labels object. Keys must be of the form `label1`..`label10`; values must be strings.
+      additionalProperties:
+        type: string
+      maxProperties: 10
+      example:
+        label1: campaign-id-42
+        label2: presale_event_2026
     WebParams:
       type: object
       additionalProperties: false
@@ -443,6 +355,65 @@ components:
         label10:
           type: string
           description: Optional flat-shape per-message label.
+    MessageBroadcast:
+      type: object
+      additionalProperties: false
+      description: Per-message labels can be supplied EITHER as the nested `labels` object OR as flat `label1`..`label10` fields directly on this object. Mixing both shapes in the same message returns HTTP 400.
+      properties:
+        target:
+          description: Must be omitted or null.
+        alert:
+          $ref: '#/components/schemas/Alert'
+        ios:
+          $ref: '#/components/schemas/IosParams'
+        android:
+          $ref: '#/components/schemas/AndroidParams'
+        web:
+          $ref: '#/components/schemas/WebParams'
+        labels:
+          allOf:
+          - $ref: '#/components/schemas/Labels'
+          description: Optional labels scoped to THIS message (nested shape). Merged with the top-level `labels`; per-message keys take precedence on conflict.
+        label1:
+          type: string
+          description: Optional flat-shape per-message label.
+        label2:
+          type: string
+          description: Optional flat-shape per-message label.
+        label3:
+          type: string
+          description: Optional flat-shape per-message label.
+        label4:
+          type: string
+          description: Optional flat-shape per-message label.
+        label5:
+          type: string
+          description: Optional flat-shape per-message label.
+        label6:
+          type: string
+          description: Optional flat-shape per-message label.
+        label7:
+          type: string
+          description: Optional flat-shape per-message label.
+        label8:
+          type: string
+          description: Optional flat-shape per-message label.
+        label9:
+          type: string
+          description: Optional flat-shape per-message label.
+        label10:
+          type: string
+          description: Optional flat-shape per-message label.
+    AndroidParams:
+      type: object
+      additionalProperties: false
+      properties:
+        extra:
+          type: object
+          additionalProperties: true
+        priority:
+          type: string
+          example: high
     Alert:
       description: Either a plain string alert or a structured alert.
       oneOf:
@@ -459,6 +430,68 @@ components:
         required:
         - body
         additionalProperties: false
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+    IosParams:
+      type: object
+      additionalProperties: false
+      properties:
+        sound:
+          type: string
+        badge:
+          type: integer
+        category:
+          type: string
+        extra:
+          type: object
+          additionalProperties: true
+        content_available:
+          type: boolean
+        mutable_content:
+          type: boolean
+    BatchRequest:
+      type: object
+      required:
+      - target_type
+      - messages
+      additionalProperties: false
+      properties:
+        request_id:
+          type: string
+          maxLength: 255
+          description: Optional caller-supplied id. For non-customer_id target types, duplicate request_ids in a rolling window are rejected with 400.
+        campaign_key:
+          type: string
+          maxLength: 255
+          description: Optional caller-supplied label for the Localytics campaign. No whitespace.
+        target_type:
+          type: string
+          enum:
+          - customer_id
+          - audience_id
+          - profile
+          - broadcast
+        labels:
+          allOf:
+          - $ref: '#/components/schemas/Labels'
+          description: Batch-level labels applied to every message. For customer_id, per-message `labels` override these on key conflicts.
+        messages:
+          type: array
+          minItems: 1
+          description: 'Per `target_type`: customer_id allows many entries; audience_id / profile / broadcast must have exactly one.'
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/MessageCustomerId'
+            - $ref: '#/components/schemas/MessageAudienceId'
+            - $ref: '#/components/schemas/MessageProfile'
+            - $ref: '#/components/schemas/MessageBroadcast'
+        all_devices:
+          type: boolean
+        test:
+          type: boolean
     MessageCustomerId:
       type: object
       additionalProperties: false
@@ -515,60 +548,6 @@ components:
         label10:
           type: string
           description: Optional flat-shape per-message label.
-    Labels:
-      type: object
-      description: Labels object. Keys must be of the form `label1`..`label10`; values must be strings.
-      additionalProperties:
-        type: string
-      maxProperties: 10
-      example:
-        label1: campaign-id-42
-        label2: presale_event_2026
-    BatchRequest:
-      type: object
-      required:
-      - target_type
-      - messages
-      additionalProperties: false
-      properties:
-        request_id:
-          type: string
-          maxLength: 255
-          description: Optional caller-supplied id. For non-customer_id target types, duplicate request_ids in a rolling window are rejected with 400.
-        campaign_key:
-          type: string
-          maxLength: 255
-          description: Optional caller-supplied label for the Localytics campaign. No whitespace.
-        target_type:
-          type: string
-          enum:
-          - customer_id
-          - audience_id
-          - profile
-          - broadcast
-        labels:
-          allOf:
-          - $ref: '#/components/schemas/Labels'
-          description: Batch-level labels applied to every message. For customer_id, per-message `labels` override these on key conflicts.
-        messages:
-          type: array
-          minItems: 1
-          description: 'Per `target_type`: customer_id allows many entries; audience_id / profile / broadcast must have exactly one.'
-          items:
-            oneOf:
-            - $ref: '#/components/schemas/MessageCustomerId'
-            - $ref: '#/components/schemas/MessageAudienceId'
-            - $ref: '#/components/schemas/MessageProfile'
-            - $ref: '#/components/schemas/MessageBroadcast'
-        all_devices:
-          type: boolean
-        test:
-          type: boolean
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
   securitySchemes:
     basicAuth:
       type: http

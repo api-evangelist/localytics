@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: Localytics And Audience Campaigns API
-  description: "Localytics is an enterprise-grade mobile intelligence platform for real-time analytics, personalized marketing, and customer lifecycle optimization.\n\n- Campaign Functionality - The platform supports comprehensive campaign creation and management through this API, enabling flexible configuration of goal, scheduling, and target audience.\n\n  * Enables full campaign scheduling with A/B testing via multiple creatives, control-group weights, and advanced scheduling and delivery controls.\n\n  * Upload creative assets (HTML/Javascript/CSS assets) via API for the supporting channels (In-App, Inbox)\n\n  * Associate creatives with campaigns using standard formatting options from dashboard.\n\n  * Supported channels:\n      Push Messaging\n"
+  description: Localytics is an enterprise-grade mobile intelligence platform for real-time analytics, personalized marketing, and customer lifecycle optimization.
   version: 1.1.2
 servers:
 - url: https://dashboard.localytics.com/api/v6

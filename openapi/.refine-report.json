@@ -17,11 +17,14 @@
   "notes": [
     "sourced from openapi/_original/ (2 archived document(s)); previously refined output at the top level was skipped rather than re-split",
     "localytics-campaigns-audiences-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
-    "localytics-transactional-push-openapi.json: upgraded openapi 3.0.3 -> OpenAPI 3.2.0"
+    "localytics-transactional-push-openapi.json: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
   ],
   "skipped": [
     "localytics-audiences-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "localytics-campaigns-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "localytics-meta-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "localytics-push-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "localytics-push-campaigns-api-openapi.yml: previously refined output, superseded by openapi/_original/"
   ]
 }

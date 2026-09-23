@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: Localytics Campaigns And Audience Audiences API
-  description: "Localytics is an enterprise-grade mobile intelligence platform for real-time analytics, personalized marketing, and customer lifecycle optimization.\n\n- Campaign Functionality - The platform supports comprehensive campaign creation and management through this API, enabling flexible configuration of goal, scheduling, and target audience.\n\n  * Enables full campaign scheduling with A/B testing via multiple creatives, control-group weights, and advanced scheduling and delivery controls.\n\n  * Upload creative assets (HTML/Javascript/CSS assets) via API for the supporting channels (In-App, Inbox)\n\n  * Associate creatives with campaigns using standard formatting options from dashboard.\n\n  * Supported channels:\n      Push Messaging\n"
+  description: Localytics is an enterprise-grade mobile intelligence platform for real-time analytics, personalized marketing, and customer lifecycle optimization.
   version: 1.1.2
 servers:
 - url: https://dashboard.localytics.com/api/v6
@@ -13,9 +13,7 @@ tags:
 paths:
   /orgs/{org_id}/apps/{app_id}/audiences:
     post:
-      summary: 'Create a new audience with the given definition.
-
-        '
+      summary: Create a new audience with the given definition
       tags:
       - Audiences
       operationId: createAudiences
@@ -82,7 +80,7 @@ paths:
           description: Unauthorized
   /orgs/{org_id}/apps/{app_id}/audiences/{audience_id}/segmentation:
     post:
-      summary: Calculate size for a single audience id.
+      summary: Calculate size for a single audience id
       tags:
       - Audiences
       operationId: AudienceSegmentation
@@ -118,9 +116,7 @@ paths:
   /orgs/{org_id}/apps/{app_id}/audiences/{audience_id}:
     get:
       summary: Retrieve a specific audience
-      description: 'Returns segmentation metrics and the audience''s targeting rules for the given audience ID. Includes counts such as total users, users with push tokens, and users seen in the last 30 days.
-
-        '
+      description: Returns segmentation metrics and the audience's targeting rules for the given audience ID. Includes counts such as total users, users with push tokens, and users seen in the last 30 days.
       tags:
       - Audiences
       operationId: GetAudienceSegmentationCount
@@ -155,9 +151,7 @@ paths:
         '404':
           description: Audience not found or segmentation count missing.
     patch:
-      summary: 'Edit a existing audience with the given definition or name.
-
-        '
+      summary: Edit a existing audience with the given definition or name
       tags:
       - Audiences
       operationId: editAudiences
@@ -200,7 +194,7 @@ paths:
         '422':
           description: Invalid input parameters
     delete:
-      summary: Delete the audience.
+      summary: Delete the audience
       tags:
       - Audiences
       operationId: DeleteAudience
@@ -250,95 +244,42 @@ components:
           enum:
           - install_id
           - customer_id
-    ProfileDefinition:
+    TargetRulesNewAudience:
+      $ref: '#/components/schemas/AudienceDefinition'
+    SegmentationCount:
+      type: object
+      properties:
+        user_count:
+          type: integer
+        has_push:
+          type: integer
+        seen_last_thirty:
+          type: integer
+        updated_at:
+          type: string
+          format: date-time
+    DateOperators:
+      type: string
+      enum:
+      - is on or before
+      - is on or after
+      - is exactly
+      - is not
+      - is between
+      - is defined
+      - is not defined
+    AudienceParams:
       type: object
       required:
-      - criteria
-      - operator
+      - name
+      - target_rules
       properties:
-        criteria:
-          type: array
-          items:
-            type: object
-            properties:
-              key:
-                type: string
-              scope:
-                type: string
-                enum:
-                - app
-                - org
-                description: App - Profile attribute specific to the selected app Org - A global profile attribute common to all your apps
-              date_type:
-                type: string
-                enum:
-                - date
-                - days ago
-                - days from now
-                description: Required when the key is date type.
-              operator:
-                type: string
-                oneOf:
-                - $ref: '#/components/schemas/StringOperators'
-                - $ref: '#/components/schemas/NumberOperators'
-                - $ref: '#/components/schemas/DateOperators'
-              values:
-                type: array
-                items:
-                  type: string
-                description: values are not required for is_defined and is_not_defined operator.
-            required:
-            - key
-            - scope
-            - operator
-            - values
-        operator:
-          type: string
-          enum:
-          - and
-          - or
-    AudienceBehaviorRules:
-      type: object
-      properties:
-        days:
-          type: integer
-        behavior_rule_operator:
-          type: string
-          enum:
-          - and
-          - or
-          - and_then
-        rules:
-          type: array
-          items:
-            $ref: '#/components/schemas/AudienceBehaviorRule'
-    AudienceResponse:
-      type: object
-      properties:
-        id:
-          type: integer
         name:
-          type: string
-        created_at:
           type: string
         target_rules:
           type: object
           allOf:
           - $ref: '#/components/schemas/TargetRulesNewAudience'
-        segmentation_count:
-          type: object
-          properties:
-            user_count:
-              type: integer
-            has_push:
-              type: integer
-            seen_last_thirty:
-              type: integer
-    DimensionStringOperators:
-      type: string
-      enum:
-      - is one of
-      - is none of
     AudienceSegmentation:
       type: object
       properties:
@@ -354,13 +295,37 @@ components:
           type: string
           format: date
           example: '2025-11-26T10:34:18Z'
-    StringOperators:
+    AudienceBehaviorRules:
+      type: object
+      properties:
+        days:
+          type: integer
+        behavior_rule_operator:
+          type: string
+          enum:
+          - and
+          - or
+          - and_then
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/AudienceBehaviorRule'
+    DimensionStringOperators:
       type: string
       enum:
-      - is defined
-      - is not defined
       - is one of
       - is none of
+    NumberOperators:
+      type: string
+      enum:
+      - is one of
+      - is none of
+      - <
+      - <=
+      - '>'
+      - '>='
+      - is between
+      - is defined
     AudienceSegmentationCountResponse:
       type: object
       properties:
@@ -379,55 +344,6 @@ components:
           format: date-time
         target_rules:
           $ref: '#/components/schemas/AudienceTargetRules'
-    DimensionNumberOperators:
-      type: string
-      enum:
-      - is one of
-      - is none of
-      - greater than
-      - at least
-      - less than
-      - no more than
-      - equal to
-      - between
-    AudienceBehaviorRule:
-      type: object
-      properties:
-        count:
-          type: integer
-        count_operator:
-          type: string
-          enum:
-          - less_than
-          - exactly
-          - atleast
-        event_name:
-          type: string
-        conditions:
-          $ref: '#/components/schemas/AudienceBehaviorConditions'
-        neg_time_window:
-          type: array
-          items:
-            type: integer
-    SegmentationCount:
-      type: object
-      properties:
-        user_count:
-          type: integer
-        has_push:
-          type: integer
-        seen_last_thirty:
-          type: integer
-        updated_at:
-          type: string
-          format: date-time
-    DimensionVersionOperators:
-      type: string
-      enum:
-      - is one of
-      - is none of
-      - greater than
-      - less than
     AudienceDefinition:
       type: object
       required:
@@ -535,92 +451,6 @@ components:
           - rules
         profile:
           $ref: '#/components/schemas/ProfileDefinition'
-    DateOperators:
-      type: string
-      enum:
-      - is on or before
-      - is on or after
-      - is exactly
-      - is not
-      - is between
-      - is defined
-      - is not defined
-    AudienceResponseGet:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        deleted_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        updated_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        target_rules:
-          $ref: '#/components/schemas/AudienceTargetRules'
-        segmentation_count:
-          $ref: '#/components/schemas/SegmentationCount'
-    AudienceParams:
-      type: object
-      required:
-      - name
-      - target_rules
-      properties:
-        name:
-          type: string
-        target_rules:
-          type: object
-          allOf:
-          - $ref: '#/components/schemas/TargetRulesNewAudience'
-    AudienceFilter:
-      type: object
-      properties:
-        dimension_name:
-          type: string
-        operator:
-          type: string
-          example: is one of
-        value:
-          oneOf:
-          - type: string
-          - type: integer
-          - type: array
-            items:
-              type: string
-    TargetRulesNewAudience:
-      $ref: '#/components/schemas/AudienceDefinition'
-    AudienceProfileRules:
-      type: object
-      properties:
-        criteria:
-          type: array
-          items:
-            $ref: '#/components/schemas/AudienceProfileCriterion'
-        operator:
-          type: string
-          enum:
-          - and
-          - or
-    NumberOperators:
-      type: string
-      enum:
-      - is one of
-      - is none of
-      - <
-      - <=
-      - '>'
-      - '>='
-      - is between
-      - is defined
     AudienceBehaviorConditions:
       type: object
       properties:
@@ -645,6 +475,170 @@ components:
         operator:
           type: string
           example: is one of
+    DimensionVersionOperators:
+      type: string
+      enum:
+      - is one of
+      - is none of
+      - greater than
+      - less than
+    AudienceResponseGet:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        updated_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        target_rules:
+          $ref: '#/components/schemas/AudienceTargetRules'
+        segmentation_count:
+          $ref: '#/components/schemas/SegmentationCount'
+    AudienceBehaviorRule:
+      type: object
+      properties:
+        count:
+          type: integer
+        count_operator:
+          type: string
+          enum:
+          - less_than
+          - exactly
+          - atleast
+        event_name:
+          type: string
+        conditions:
+          $ref: '#/components/schemas/AudienceBehaviorConditions'
+        neg_time_window:
+          type: array
+          items:
+            type: integer
+    StringOperators:
+      type: string
+      enum:
+      - is defined
+      - is not defined
+      - is one of
+      - is none of
+    AudienceProfileRules:
+      type: object
+      properties:
+        criteria:
+          type: array
+          items:
+            $ref: '#/components/schemas/AudienceProfileCriterion'
+        operator:
+          type: string
+          enum:
+          - and
+          - or
+    ProfileDefinition:
+      type: object
+      required:
+      - criteria
+      - operator
+      properties:
+        criteria:
+          type: array
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+              scope:
+                type: string
+                enum:
+                - app
+                - org
+                description: App - Profile attribute specific to the selected app Org - A global profile attribute common to all your apps
+              date_type:
+                type: string
+                enum:
+                - date
+                - days ago
+                - days from now
+                description: Required when the key is date type.
+              operator:
+                type: string
+                oneOf:
+                - $ref: '#/components/schemas/StringOperators'
+                - $ref: '#/components/schemas/NumberOperators'
+                - $ref: '#/components/schemas/DateOperators'
+              values:
+                type: array
+                items:
+                  type: string
+                description: values are not required for is_defined and is_not_defined operator.
+            required:
+            - key
+            - scope
+            - operator
+            - values
+        operator:
+          type: string
+          enum:
+          - and
+          - or
+    AudienceFilter:
+      type: object
+      properties:
+        dimension_name:
+          type: string
+        operator:
+          type: string
+          example: is one of
+        value:
+          oneOf:
+          - type: string
+          - type: integer
+          - type: array
+            items:
+              type: string
+    AudienceResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        created_at:
+          type: string
+        target_rules:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/TargetRulesNewAudience'
+        segmentation_count:
+          type: object
+          properties:
+            user_count:
+              type: integer
+            has_push:
+              type: integer
+            seen_last_thirty:
+              type: integer
+    DimensionNumberOperators:
+      type: string
+      enum:
+      - is one of
+      - is none of
+      - greater than
+      - at least
+      - less than
+      - no more than
+      - equal to
+      - between
   securitySchemes:
     BasicAuth:
       type: http
