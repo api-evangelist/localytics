@@ -220,27 +220,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    WebParams:
-      type: object
-      additionalProperties: false
-      properties:
-        badge:
-          type: string
-        dir:
-          type: string
-        extra:
-          type: object
-          additionalProperties: true
-        icon:
-          type: string
-        renotify:
-          type: boolean
-        requireInteraction:
-          type: boolean
-        silent:
-          type: boolean
-        tag:
-          type: string
     BatchRequest:
       type: object
       required:
@@ -290,7 +269,17 @@ components:
       example:
         label1: campaign-id-42
         label2: presale_event_2026
-    MessageProfile:
+    AndroidParams:
+      type: object
+      additionalProperties: false
+      properties:
+        extra:
+          type: object
+          additionalProperties: true
+        priority:
+          type: string
+          example: high
+    MessageAudienceId:
       type: object
       additionalProperties: false
       required:
@@ -298,9 +287,8 @@ components:
       description: Per-message labels can be supplied EITHER as the nested `labels` object OR as flat `label1`..`label10` fields directly on this object. Mixing both shapes in the same message returns HTTP 400.
       properties:
         target:
-          type: object
-          description: Profile-targeting payload (criteria + outer op).
-          additionalProperties: true
+          type: integer
+          description: Audience id.
         alert:
           $ref: '#/components/schemas/Alert'
         ios:
@@ -360,58 +348,32 @@ components:
           type: boolean
         mutable_content:
           type: boolean
-    MessageAudienceId:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+    WebParams:
       type: object
       additionalProperties: false
-      required:
-      - target
-      description: Per-message labels can be supplied EITHER as the nested `labels` object OR as flat `label1`..`label10` fields directly on this object. Mixing both shapes in the same message returns HTTP 400.
       properties:
-        target:
-          type: integer
-          description: Audience id.
-        alert:
-          $ref: '#/components/schemas/Alert'
-        ios:
-          $ref: '#/components/schemas/IosParams'
-        android:
-          $ref: '#/components/schemas/AndroidParams'
-        web:
-          $ref: '#/components/schemas/WebParams'
-        labels:
-          allOf:
-          - $ref: '#/components/schemas/Labels'
-          description: Optional labels scoped to THIS message (nested shape). Merged with the top-level `labels`; per-message keys take precedence on conflict.
-        label1:
+        badge:
           type: string
-          description: Optional flat-shape per-message label.
-        label2:
+        dir:
           type: string
-          description: Optional flat-shape per-message label.
-        label3:
+        extra:
+          type: object
+          additionalProperties: true
+        icon:
           type: string
-          description: Optional flat-shape per-message label.
-        label4:
+        renotify:
+          type: boolean
+        requireInteraction:
+          type: boolean
+        silent:
+          type: boolean
+        tag:
           type: string
-          description: Optional flat-shape per-message label.
-        label5:
-          type: string
-          description: Optional flat-shape per-message label.
-        label6:
-          type: string
-          description: Optional flat-shape per-message label.
-        label7:
-          type: string
-          description: Optional flat-shape per-message label.
-        label8:
-          type: string
-          description: Optional flat-shape per-message label.
-        label9:
-          type: string
-          description: Optional flat-shape per-message label.
-        label10:
-          type: string
-          description: Optional flat-shape per-message label.
     MessageBroadcast:
       type: object
       additionalProperties: false
@@ -461,11 +423,59 @@ components:
         label10:
           type: string
           description: Optional flat-shape per-message label.
-    Error:
+    MessageProfile:
       type: object
+      additionalProperties: false
+      required:
+      - target
+      description: Per-message labels can be supplied EITHER as the nested `labels` object OR as flat `label1`..`label10` fields directly on this object. Mixing both shapes in the same message returns HTTP 400.
       properties:
-        error:
+        target:
+          type: object
+          description: Profile-targeting payload (criteria + outer op).
+          additionalProperties: true
+        alert:
+          $ref: '#/components/schemas/Alert'
+        ios:
+          $ref: '#/components/schemas/IosParams'
+        android:
+          $ref: '#/components/schemas/AndroidParams'
+        web:
+          $ref: '#/components/schemas/WebParams'
+        labels:
+          allOf:
+          - $ref: '#/components/schemas/Labels'
+          description: Optional labels scoped to THIS message (nested shape). Merged with the top-level `labels`; per-message keys take precedence on conflict.
+        label1:
           type: string
+          description: Optional flat-shape per-message label.
+        label2:
+          type: string
+          description: Optional flat-shape per-message label.
+        label3:
+          type: string
+          description: Optional flat-shape per-message label.
+        label4:
+          type: string
+          description: Optional flat-shape per-message label.
+        label5:
+          type: string
+          description: Optional flat-shape per-message label.
+        label6:
+          type: string
+          description: Optional flat-shape per-message label.
+        label7:
+          type: string
+          description: Optional flat-shape per-message label.
+        label8:
+          type: string
+          description: Optional flat-shape per-message label.
+        label9:
+          type: string
+          description: Optional flat-shape per-message label.
+        label10:
+          type: string
+          description: Optional flat-shape per-message label.
     MessageCustomerId:
       type: object
       additionalProperties: false
@@ -522,16 +532,6 @@ components:
         label10:
           type: string
           description: Optional flat-shape per-message label.
-    AndroidParams:
-      type: object
-      additionalProperties: false
-      properties:
-        extra:
-          type: object
-          additionalProperties: true
-        priority:
-          type: string
-          example: high
     Alert:
       description: Either a plain string alert or a structured alert.
       oneOf:
