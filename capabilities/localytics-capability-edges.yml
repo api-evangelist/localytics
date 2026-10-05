@@ -1,0 +1,36 @@
+slug: localytics
+provider: Localytics
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 2
+edges:
+- tag: Audiences
+  spec_file: localytics-audiences-api-openapi.yml
+  capability_id: BC-420.20
+  capability_id_l1: BC-420
+  capability_name: Customer Segmentation Management
+  confidence: 0.82
+  evidence: POST /orgs/{org_id}/apps/{app_id}/audiences createAudiences "Create a new audience with the
+    given definition"; schemas AudienceTargetRules, AudienceProfileCriterion, SegmentationCount
+  reason: Operations define, size and maintain behavioural/profile-based audience segments of app users
+    — customer segmentation for targeting. Some ambiguity over whether it sits under segmentation or digital
+    marketing targeting.
+- tag: Push Campaigns
+  spec_file: localytics-push-campaigns-api-openapi.yml
+  capability_id: BC-400.60
+  capability_id_l1: BC-400
+  capability_name: Digital Marketing Management
+  confidence: 0.72
+  evidence: POST .../push/campaigns CreatePushCampaign "Create a new push campaign with the given parameters";
+    GET .../push/campaigns/{campaign_id} "Get the push campaign's audience, creatives, schedule details"
+  reason: Full lifecycle of push marketing campaigns including audience, creatives and scheduling — digital
+    marketing / marketing automation campaign execution. Slight ambiguity versus lifecycle demand generation.
